@@ -1219,10 +1219,12 @@ function updateGenBtn() {
 // ─────────────────────────────────────────────
 // 8. 디자인 생성 버튼 동작 — 아웃솔 고정 + 로고 고정 + 드롭 수만큼 반복
 // ─────────────────────────────────────────────
-// TODO: Railway 배포 후 실제 URL 입력
-var apiBase = (window.location.hostname === 'localhost' || window.location.protocol === 'file:')
-  ? 'http://localhost:3001'
-  : 'https://YOUR_RAILWAY_BACKEND_URL'; // TODO: Railway 배포 후 실제 URL 입력
+// Vercel 서버리스 함수(/api/submit, /api/status, /api/result) 사용.
+// file:// 로컬 테스트 시에는 동일 오리진 api가 없으므로 Vercel 배포 URL 로 고정.
+var DEPLOYED_API = 'https://coreofalchemy-ui.github.io'; // 배포 후 Vercel URL로 자동 대체됨
+var apiBase = (window.location.protocol === 'https:' || window.location.protocol === 'http:')
+  ? '' // 같은 오리진 (Vercel 배포 or localhost:3000 등)
+  : DEPLOYED_API; // file:// 일 때만 절대 URL
 
 // 풋베드(footbed, 발이 닿는 상단 안창) 이미지를 페이지 로드 시 미리 base64로 캐시
 // — 생성 때마다 자동 참조에 포함하여 "발 닿는 면"의 형태·라인을 고정
@@ -1282,26 +1284,26 @@ function buildGenerationPrompt(hint, refIndex, totalN) {
 
 async function generateOne(refImage, idx, totalN, hint) {
   var references = [];
-  if (OUTSOLE_DATA_URL) references.push(OUTSOLE_DATA_URL);
+  if (FOOTBED_DATA_URL) references.push(FOOTBED_DATA_URL);
 
-  var resp = await fetch(apiBase + '/api/gemini?action=edit-image', {
+  // Vercel 단일 함수 (/api/generate) — Pro 플랜 maxDuration 300s 로 submit+poll+result 전부 서버에서 처리
+  var resp = await fetch(apiBase + '/api/generate', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      image: refImage, // 드롭한 레퍼런스 중 하나가 primary
-      referenceImages: references, // 아웃솔 고정 참조
+      image: refImage,
+      referenceImages: references,
       prompt: buildGenerationPrompt(hint, idx, totalN),
-      engine: 'gpt-image-2',
-      quality: 'low' // 빠른·저렴 생성 (장당 ~$0.01)
+      quality: 'low'
     })
   });
-  var data = await resp.json();
-  if (!resp.ok || !data.success) {
-    throw new Error(data.error || data.message || 'API 오류');
+  if (!resp.ok) {
+    var errText = await resp.text();
+    throw new Error(resp.status + ': ' + errText.slice(0, 200));
   }
-  var resultImg = data.imageBase64 || data.imageUrl || (data.images && data.images[0]) || null;
-  if (!resultImg) throw new Error('이미지 데이터 없음');
-  return resultImg;
+  var data = await resp.json();
+  if (!data.success || !data.imageUrl) throw new Error(data.error || '이미지 없음');
+  return data.imageUrl;
 }
 
 genBtn.addEventListener('click', async function() {
@@ -1312,8 +1314,8 @@ genBtn.addEventListener('click', async function() {
   var done = 0;
   var errors = 0;
 
-  // 아웃솔 프리로드 대기 (최대 2초)
-  for (var w = 0; w < 20 && !OUTSOLE_DATA_URL; w++) {
+  // 풋베드 프리로드 대기 (최대 2초)
+  for (var w = 0; w < 20 && !FOOTBED_DATA_URL; w++) {
     await new Promise(function(r) { setTimeout(r, 100); });
   }
 
