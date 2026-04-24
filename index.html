@@ -49,6 +49,35 @@ body {
 .dot-no { background: #f44336; }
 .dot-pending { background: #ff9800; }
 
+/* 섹션 토글 */
+.section-bar {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 0 10px;
+}
+.section-btn {
+  padding: 7px 20px;
+  border: 1px solid #444;
+  border-radius: 20px;
+  background: transparent;
+  color: #aaa;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.section-btn:hover { border-color: #888; color: #fff; }
+.section-btn.active {
+  background: #fbbf24;
+  color: #000;
+  border-color: #fbbf24;
+  font-weight: 800;
+}
+
 /* 카테고리 필터 */
 .filter-bar {
   display: flex;
@@ -81,6 +110,130 @@ body {
   opacity: 0.6;
   margin-left: 3px;
 }
+
+/* 생성기 존 */
+.generator-zone {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 12px;
+  padding: 20px;
+}
+.drop-area {
+  border: 2px dashed #333;
+  border-radius: 8px;
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  margin-bottom: 16px;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.drop-area:hover { border-color: #10b981; }
+.drop-area.drag-over { border-color: #10b981; background: rgba(16, 185, 129, 0.05); }
+.drop-hint {
+  color: #888;
+  font-size: 17px;
+  pointer-events: none;
+  line-height: 1.6;
+}
+.drop-hint .drop-icon {
+  font-size: 44px;
+  display: block;
+  margin-bottom: 10px;
+}
+.drop-previews {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+.drop-preview-item {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+.drop-preview-item img {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+.drop-preview-item .remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: #f44336;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  line-height: 1;
+}
+.gen-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.gen-label {
+  font-size: 12px;
+  color: #888;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.gen-label input[type="text"] {
+  background: #0d0d0d;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 8px 12px;
+  color: #fff;
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.gen-label input[type="text"]:focus { border-color: #555; }
+.gen-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 11px 28px;
+  font-size: 13px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.2s;
+  align-self: flex-start;
+}
+.gen-btn:hover:not(:disabled) { background: #e0e0e0; }
+.gen-btn:disabled {
+  background: #2a2a2a;
+  color: #555;
+  cursor: not-allowed;
+}
+.gen-status {
+  font-size: 12px;
+  color: #888;
+  min-height: 18px;
+}
+.gen-status.loading { color: #fbbf24; }
+.gen-status.success { color: #4CAF50; }
+.gen-status.error { color: #f44336; }
 
 /* 그리드 */
 .grid {
@@ -118,6 +271,7 @@ body {
 .card.selected-yes { border-color: #4CAF50; }
 .card.selected-no { border-color: #f44336; opacity: 0.35; }
 .card.selected-no:hover { opacity: 0.6; }
+.card.generated-card { border-color: #fbbf24; }
 .card-number {
   position: absolute;
   top: 10px;
@@ -164,6 +318,36 @@ body {
   font-weight: 600;
   line-height: 1.4;
   color: #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.card-body h3 .h3-text { flex: 1; min-width: 0; word-break: keep-all; }
+.zoom-btn {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #ddd;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  padding: 0;
+}
+.zoom-btn:hover, .zoom-btn:active {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+  transform: scale(1.08);
+}
+@media (max-width: 640px) {
+  .zoom-btn { width: 34px; height: 34px; font-size: 16px; }
 }
 .badge {
   display: inline-block;
@@ -183,6 +367,9 @@ body {
 .badge-classic { background: #3d1f2a; color: #f472b6; }
 .badge-gothic { background: #1f1a2e; color: #b794f4; }
 .badge-aqua { background: #0e2a33; color: #67e8f9; }
+.badge-coa { background: #2a1f0e; color: #fbbf24; }
+.badge-generated { background: #0e2a1f; color: #00ff9d; }
+.card.generated-card { border-color: #00ff9d !important; box-shadow: 0 0 8px rgba(0, 255, 157, 0.25); }
 
 .btns {
   display: flex;
@@ -295,6 +482,93 @@ body {
   pointer-events: none;
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
+
+/* 라이트박스 모달 */
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.92);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+.lightbox.show { display: flex; }
+.lightbox-inner {
+  position: relative;
+  max-width: 95vw;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+.lightbox-img {
+  max-width: 95vw;
+  max-height: 75vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  background: #fff;
+}
+.lightbox-meta {
+  color: #eee;
+  font-size: 14px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.lightbox-meta .lb-num {
+  background: rgba(255,255,255,0.1);
+  color: #bbb;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.lightbox-btns {
+  display: flex;
+  gap: 12px;
+}
+.lightbox-btns button {
+  padding: 12px 36px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 120px;
+}
+.lb-btn-yes { background: #4CAF50; color: #fff; }
+.lb-btn-yes.active { background: #2e7d32; box-shadow: 0 0 0 3px rgba(76,175,80,0.4); }
+.lb-btn-no { background: #f44336; color: #fff; }
+.lb-btn-no.active { background: #c62828; box-shadow: 0 0 0 3px rgba(244,67,54,0.4); }
+.lb-close, .lb-prev, .lb-next {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: #fff;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lb-close { top: 20px; right: 20px; transform: none; }
+.lb-prev { left: 24px; }
+.lb-next { right: 24px; }
+.lb-close:hover, .lb-prev:hover, .lb-next:hover { background: rgba(255,255,255,0.18); }
 </style>
 </head>
 <body>
@@ -304,6 +578,23 @@ body {
   <p>콜라보 여름 슬리퍼 디자인 셀렉션</p>
 </div>
 
+<!-- 이미지 드롭존 + 디자인 생성 -->
+<div class="generator-zone">
+  <div class="drop-area" id="dropArea">
+    <div class="drop-hint"><span class="drop-icon">📁</span>레퍼런스 이미지를 여기에 드롭 · 또는 클릭해서 파일 선택 (1~4장)</div>
+    <input type="file" id="fileInput" accept="image/*" multiple style="display:none">
+    <div class="drop-previews" id="dropPreviews"></div>
+  </div>
+  <div class="gen-controls">
+    <label class="gen-label">
+      프롬프트 힌트 (선택):
+      <input type="text" id="genHint" placeholder="예: 플립플랍 스타일, 블랙 가죽, 미니멀" />
+    </label>
+    <button class="gen-btn" id="genBtn" disabled>🎨 디자인 생성 (GPT-Image-2)</button>
+    <div class="gen-status" id="genStatus"></div>
+  </div>
+</div>
+
 <div class="stats-bar">
   <div class="stat-item"><span class="dot dot-total"></span> 전체 <strong id="total">0</strong></div>
   <div class="stat-item"><span class="dot dot-yes"></span> O <strong id="yesCount">0</strong></div>
@@ -311,6 +602,10 @@ body {
   <div class="stat-item"><span class="dot dot-pending"></span> 미선택 <strong id="pendingCount">0</strong></div>
 </div>
 
+<!-- 섹션 토글 -->
+<div class="section-bar" id="sectionBar"></div>
+
+<!-- 카테고리 필터 -->
 <div class="filter-bar" id="filterBar"></div>
 
 <div class="grid" id="grid"></div>
@@ -328,198 +623,294 @@ body {
 
 <div class="toast" id="toast"></div>
 
+<!-- 라이트박스 모달 -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-prev" id="lbPrev" title="이전 (←)">◀</button>
+  <button class="lb-next" id="lbNext" title="다음 (→)">▶</button>
+  <button class="lb-close" id="lbClose" title="닫기 (ESC)">✕</button>
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lbImg" src="" alt="">
+    <div class="lightbox-meta" id="lbMeta"></div>
+    <div class="lightbox-btns">
+      <button class="lb-btn-yes" id="lbYes">O  선택</button>
+      <button class="lb-btn-no" id="lbNo">X  제외</button>
+    </div>
+  </div>
+</div>
+
 <script>
+// ─────────────────────────────────────────────
+// 1. 스크래핑 데이터 (186개, 절대 수정 금지)
+// ─────────────────────────────────────────────
 const designs = [
-  { id:1, name:"Combat Flip Flops Overland Black", img:"https://www.combatflipflops.com/cdn/shop/products/Overland-Side-Outsole-Pair_496f2e72-8ed8-4434-916e-1760d45732fe.png?v=1680726740", cat:"tactical", catLabel:"택티컬" },
-  { id:2, name:"MIL-TEC Combat Sandals", img:"https://www.americanapipedream.com/cdn/shop/files/CombatFlopsTop.jpg?v=1750174442", cat:"tactical", catLabel:"택티컬" },
-  { id:3, name:"Suicoke MOTO-CAB Black", img:"https://www.blendsus.com/cdn/shop/products/suicoke-OG-056CAB-BLK-1.jpg?v=1623886415", cat:"street", catLabel:"스트릿" },
-  { id:4, name:"Suicoke KAW-VS Suede Slide Black", img:"https://wefashionssny.com/cdn/shop/files/58_aad19241-80be-43cd-a652-1e15253a624e.png?v=1745945235", cat:"street", catLabel:"스트릿" },
-  { id:5, name:"Peter Do Black Combat Sandals", img:"https://cdn.modesens.com/availability/49953676?w=1024", cat:"luxury", catLabel:"럭셔리" },
-  { id:6, name:"Xti Combat Sandals Black", img:"https://cdna.lystit.com/1040/1300/n/photos/shoppremiumoutlets/c8ea6654/xti-black-Combat-Sandals-By-_.jpeg", cat:"street", catLabel:"스트릿" },
-  { id:7, name:"Rick Owens DRKSHDW Rubber Slide Black", img:"https://www.doshaburi.com/cdn/shop/products/dsm23ss-251.jpg?v=1680793063", cat:"highend", catLabel:"하이엔드" },
-  { id:8, name:"New Rock Metallic Punk Velcro Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-metallic-punk-rock-black-velcro-sandals-008.png?v=1745822537", cat:"street", catLabel:"스트릿" },
-  { id:9, name:"New Rock Chunky Buckle Platform Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-chunky-black-buckle-platform-sandals-004.png?v=1717675196", cat:"street", catLabel:"스트릿" },
-  { id:10, name:"New Rock Bio Black Tower Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-bio-black-tower-sandals-unisex-gothic-footwear-008.png?v=1717673866", cat:"street", catLabel:"스트릿" },
-  { id:11, name:"New Rock Black Buckled Platform Urban", img:"https://hardnheavy.style/cdn/shop/files/new-rock-black-buckled-platform-sandals-in-urban-style-001.png?v=1717653280", cat:"street", catLabel:"스트릿" },
-  { id:12, name:"New Rock Gothic Platform Buckle Zipper", img:"https://hardnheavy.style/cdn/shop/files/new-rock-male-gothic-platform-sandals-with-buckles-and-zipper-002.png?v=1738670407", cat:"street", catLabel:"스트릿" },
-  { id:13, name:"New Rock Platform Zippers Buckles", img:"https://hardnheavy.style/cdn/shop/files/new-rock-mens-platform-sandals-with-zippers-and-buckles-008.png?v=1738655624", cat:"street", catLabel:"스트릿" },
-  { id:14, name:"New Rock Gothic Punk Buckle Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-mens-black-gothic-punk-buckle-sandals-002.png?v=1738653226", cat:"street", catLabel:"스트릿" },
-  { id:15, name:"PU Leather Luxury Flip Flops", img:"https://hardnheavy.style/cdn/shop/files/stylish-male-pu-leather-slippers-luxury-flip-flops-for-men-fashion-open-shoes-003.png?v=1692127956", cat:"street", catLabel:"스트릿" },
-  { id:16, name:"Jerusalem Sandals Peter Black", img:"https://jerusalemsandals.com/cdn/shop/products/83-blk-1.jpg", cat:"classic", catLabel:"클래식" },
-  { id:17, name:"Either/Or Woven Leather Slide Black", img:"https://shopeitheror.com/cdn/shop/files/Either-Or-Handmade-Woven-Leather-Mule_Slide_Sandals-Flat-Ethical-Sustainable_Black_Top_Side.jpg?v=1773189711", cat:"minimal", catLabel:"미니멀" },
-  { id:18, name:"Suicoke MOTO-Run Black", img:"https://www.gravitypope.com/cdn/shop/files/332-BLK_01.jpg?v=1699733116", cat:"street", catLabel:"스트릿" },
-  { id:19, name:"Suicoke Streetwear Staple", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/09174722/SUICOKE-Sandals-Slides_-A-Streetwear-Staple.jpg", cat:"street", catLabel:"스트릿" },
-  { id:20, name:"Rick Owens x Birkenstock Arizona Black", img:"https://www.svrn.com/cdn/shop/products/birkenstock-arizona-in-black-unisex-sandals-rick-owens-svrn-chicago-28225451589705.png?v=1633005540", cat:"luxury", catLabel:"럭셔리" },
-  { id:21, name:"Rick Owens x Birkenstock Iridescent", img:"https://cdn11.bigcommerce.com/s-826bu71r58/images/stencil/1280x1280/products/2638/17895/5.27.birkenstock2.1__01935.1659369326.jpg?c=2", cat:"luxury", catLabel:"럭셔리" },
-  { id:22, name:"T.U.K. Black 3-Buckle Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/products/V9880L_LEFT_OUTSIDE.jpg?v=1741630011", cat:"tactical", catLabel:"택티컬" },
-  { id:23, name:"All Black One Side Leather Slide", img:"https://shopeechicago.com/cdn/shop/files/all-black-one-side-slide-black-black-36-shoetique-all-black-essential-elements-chicago-0o7_grande.jpg?v=1775129239", cat:"minimal", catLabel:"미니멀" },
-  { id:24, name:"Madison Maison Hammered Hardware Sandal", img:"https://www.madisonstyle.com/cdn/shop/files/a4-108-black-1.jpg?v=1775677964", cat:"minimal", catLabel:"미니멀" },
-  { id:25, name:"MIKUTA Black Leather Buckle Sandal", img:"https://mikuta.com/cdn/shop/files/mikuta-the-black-leather-buckle-sandals-ss26-product-shot-2393.jpg?v=1775912709", cat:"minimal", catLabel:"미니멀" },
-  { id:26, name:"Jerusalem Sandals Barak Black Buckle", img:"https://jerusalemsandals.com/cdn/shop/files/104_Black_size_43-01.jpg?v=1748406382", cat:"classic", catLabel:"클래식" },
-  { id:27, name:"The Row Black Buckle Sandal", img:"https://savannahs.com/cdn/shop/files/250204_380.jpg?v=1775928884&width=1365", cat:"luxury", catLabel:"럭셔리" },
-  { id:28, name:"Suicoke x TOGA Collaboration", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/10134018/TC241-AJ511_04-683x1024.webp", cat:"street", catLabel:"스트릿" },
-  { id:29, name:"Rick Owens Black Sandals Leather 1", img:"https://cdna.lystit.com/photos/yoox/71912dde/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드" },
-  { id:30, name:"Rick Owens Black Sandals Leather 2", img:"https://cdna.lystit.com/photos/yoox/0f915943/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드" },
-  { id:31, name:"Rick Owens Black Sandals Leather 3", img:"https://cdna.lystit.com/photos/yoox/a6689f74/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드" },
-  { id:32, name:"Rick Owens Black Textile Sandals", img:"https://cdna.lystit.com/photos/yoox/f1a13e11/rick-owens-Black-Sandals-Textile-Fibers.jpeg", cat:"highend", catLabel:"하이엔드" },
-  { id:33, name:"Dr. Martens x Rick Owens Gryphon", img:"https://cdn.media.amplience.net/i/drmartens/27031001.80.jpg?$medium$", cat:"highend", catLabel:"하이엔드" },
-  { id:34, name:"Balenciaga Logo-Embossed Pool Slides", img:"https://cdn-images.farfetch-contents.com/21/72/33/06/21723306_59714563_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:35, name:"Balenciaga Logo-Embroidered Slides", img:"https://cdn-images.farfetch-contents.com/29/54/13/40/29541340_58643118_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:36, name:"Balenciaga Zero Toe-Loop Slides", img:"https://cdn-images.farfetch-contents.com/30/85/06/42/30850642_59810355_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:37, name:"Balenciaga BB Logo-Print Slides", img:"https://cdn-images.farfetch-contents.com/28/45/01/35/28450135_57842343_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:38, name:"Balenciaga BB-Monogram Leather Slides", img:"https://cdn-images.farfetch-contents.com/19/29/37/68/19293768_59714452_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:39, name:"Balenciaga Zero Slides", img:"https://cdn-images.farfetch-contents.com/30/95/33/25/30953325_59855359_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:40, name:"Balenciaga Perforated Slides", img:"https://cdn-images.farfetch-contents.com/35/07/56/12/35075612_66280316_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:41, name:"Balenciaga x Scholl Buckle Slides", img:"https://cdn-images.farfetch-contents.com/31/12/45/56/31124556_60567263_480.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:42, name:"Yeezy Slide Onyx Black", img:"https://www.stadiumgoods.com/cdn/shop/files/yg0pdcdfkt986edq3nycynfeewz5.png?crop=center&height=1024&v=1769536461&width=1024", cat:"street", catLabel:"스트릿" },
-  { id:43, name:"Off-White Industrial Logo Slide", img:"https://cdn.modesens.com/availability/40759848?w=1024", cat:"street", catLabel:"스트릿" },
-  { id:44, name:"Whistles Rocco Black Velcro Sandal", img:"https://www.whistles.com/dw/image/v2/BDCH_PRD/on/demandware.static/-/Sites-whistles-master-catalog/default/dw4455439e/images/01603497601/whistles-rocco-velcro-sandal-black-01.jpg?sw=1000&sh=1400&strip=false", cat:"street", catLabel:"스트릿" },
-  { id:45, name:"PEDRO Black Velcro Slip-On Sandal", img:"https://www.pedroshoes.com/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-pd-products/default/dwcf62689a/images/hi-res/2025-L2-PW1-65490199-01-1.jpg?sw=1152&sh=1536&q=80", cat:"street", catLabel:"스트릿" },
-  { id:46, name:"Suzanne Rae Black Velcro Sandal", img:"https://suzannerae.com/cdn/shop/products/ss19_velcro_sandal_black-1.jpg?v=1555948695", cat:"minimal", catLabel:"미니멀" },
-  { id:47, name:"VIKTOS Ruck Recovery SF Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/590/2696/Ruck-Recovery-SF-Slide-Murkwood-Camo-Profile__19343.1748958003.jpg?c=1", cat:"tactical", catLabel:"택티컬" },
-  { id:48, name:"VIKTOS Ruck Recovery XC Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/208/1293/Ruck-Recovery-XC-Sandal-Greyman-Profile__87258.1748961793.jpg?c=1", cat:"tactical", catLabel:"택티컬" },
-  { id:49, name:"VIKTOS Ruck Recovery MC Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/479/2370/Ruck-Recovery-MC-Slide-Multicam-Profile__94181.1748958561.jpg?c=1", cat:"tactical", catLabel:"택티컬" },
-  { id:50, name:"Suicoke DEPA-2 Black", img:"https://suicoke.com/cdn/shop/files/NOG-022-2-Black_V1.jpg?v=1772791604", cat:"street", catLabel:"스트릿" },
-  { id:51, name:"Suicoke KISEE Black", img:"https://suicoke.com/cdn/shop/files/NOG-044-Black_V1.jpg?v=1772791614", cat:"street", catLabel:"스트릿" },
-  { id:52, name:"Suicoke MOTO Black Official", img:"https://suicoke.com/cdn/shop/files/NOG-056-Black_V1.jpg?v=1772791620", cat:"street", catLabel:"스트릿" },
-  { id:53, name:"Suicoke x Space Available Collab", img:"https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F05%2F07%2Fsuicoke-x-space-available-sandal-collaboration-release-info-001.jpg?q=75&w=800&cbr=1&fit=max", cat:"street", catLabel:"스트릿" },
-  { id:54, name:"Birkenstock Arizona EVA Black", img:"https://www.birkenstock.com/dw/image/v2/BLZD_PRD/on/demandware.static/-/Sites-master-catalog-amer/default/dw6172c109/129421/129421.jpg", cat:"classic", catLabel:"클래식" },
-  { id:55, name:"Birkenstock Barbados EVA Black", img:"https://www.birkenstock.com/dw/image/v2/BLZD_PRD/on/demandware.static/-/Sites-master-catalog-amer/default/dw4e36889b/1015398/1015398.jpg", cat:"classic", catLabel:"클래식" },
-  { id:56, name:"Nike Calm Slides Black", img:"https://images.footlocker.com/is/image/EBFL2/D4116001?wid=800&hei=800", cat:"street", catLabel:"스트릿" },
-  { id:57, name:"Nike Victori One Triple Black", img:"https://images.footlocker.com/is/image/EBFL2/N9675003?wid=800&hei=800", cat:"street", catLabel:"스트릿" },
-  { id:58, name:"Nike Reactx Rejuven8 Black", img:"https://images.footlocker.com/is/image/EBFL2/HV447900?wid=800&hei=800", cat:"street", catLabel:"스트릿" },
-  { id:59, name:"Nike Benassi JDI Black", img:"https://images.footlocker.com/is/image/EBFL2/43880090?wid=800&hei=800", cat:"street", catLabel:"스트릿" },
-  { id:60, name:"The North Face Base Camp III Black", img:"https://www.gearx.com/cdn/shop/files/nf0a4t2r_ky4_detailinstep.jpg?v=1753798468", cat:"street", catLabel:"스트릿" },
-  { id:61, name:"Givenchy Slide Black", img:"https://feature.com/cdn/shop/products/Givenchy-Slide-Sandals---Black-BH301TH1DB001-11-29-22-Feature-JM-VR2.jpg?v=1669755891&width=1200", cat:"luxury", catLabel:"럭셔리" },
-  { id:62, name:"Suicoke MOTO-CAB Uncrate", img:"https://shop.uncrate.com/cdn/shop/files/suicoke-moto-cab-sandals-5.jpg", cat:"street", catLabel:"스트릿" },
-  { id:63, name:"Dr. Martens Josef Buckle Slide", img:"https://cdn.media.amplience.net/i/drmartens/31570001.80.jpg", cat:"classic", catLabel:"클래식" },
-  { id:64, name:"Black Gladiator Stud Leather", img:"https://i.pinimg.com/736x/d1/3d/e6/d13de64389cdc05433e1c2a5e0b5bc38.jpg", cat:"street", catLabel:"스트릿" },
-  { id:65, name:"Boot/Sandal Hybrid", img:"https://i.pinimg.com/736x/3a/89/d1/3a89d1e810846409f362693f22b527e1.jpg", cat:"street", catLabel:"스트릿" },
-  { id:66, name:"Black Leather Buckle Sandal", img:"https://i.pinimg.com/736x/96/fc/9c/96fc9c3e20768f59ce7dbcdd6554f92d.jpg", cat:"minimal", catLabel:"미니멀" },
-  { id:67, name:"Multi-Strap Combat Sandal", img:"https://i.pinimg.com/736x/cc/f2/ac/ccf2ac965b5691d1b115877f19783f5b.jpg", cat:"street", catLabel:"스트릿" },
-  { id:68, name:"Suicoke SS24 Campaign", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/10134702/3_e5e16ba1-6496-4102-bb80-966d8b1d5fa8-1024x576.webp", cat:"street", catLabel:"스트릿" },
-  { id:69, name:"Nike Calm Slides 2.0 Black", img:"https://images.footlocker.com/is/image/EBFL2/B0183001?wid=800&hei=800", cat:"street", catLabel:"스트릿" },
-  { id:70, name:"Off-White Industrial Slide 2", img:"https://cdn.modesens.com/media/126371771?w=1024", cat:"street", catLabel:"스트릿" },
-  { id:71, name:"Yeezy Slide Dark Onyx", img:"https://www.stadiumgoods.com/cdn/shop/files/3934bn3fepl6ewvywa1sgupiy9p9.png?v=1769530627", cat:"street", catLabel:"스트릿" },
-  { id:72, name:"Yeezy Slide Onyx Front", img:"https://solematesneakers.com/cdn/shop/products/image_d6f03c06-e4b1-4dc3-895a-c1e9dd39618c.jpg?v=1648442975", cat:"street", catLabel:"스트릿" },
-  { id:73, name:"Yeezy Slide Onyx Alt", img:"https://sportsconnectionpa.com/cdn/shop/files/Yeezyonyxslide.png?v=1697229273", cat:"street", catLabel:"스트릿" },
-  { id:74, name:"Adidas Yeezy Slide Pure", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Pure/Images/adidas-Yeezy-Slide-Pure/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:75, name:"Adidas Yeezy Slide Core", img:"https://images.stockx.com/360/Yeezy-Slide-Core/Images/Yeezy-Slide-Core/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:76, name:"Adidas Yeezy Slide Soot", img:"https://images.stockx.com/360/Yeezy-Slide-Soot/Images/Yeezy-Slide-Soot/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:77, name:"Adidas Yeezy Slide Bone", img:"https://images.stockx.com/360/Yeezy-Slide-Bone/Images/Yeezy-Slide-Bone/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:78, name:"Adidas Yeezy Slide Resin 2022", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Resin-2022/Images/adidas-Yeezy-Slide-Resin-2022/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:79, name:"Adidas Yeezy Slide Pure Restock", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Pure-Restock-Pair/Images/adidas-Yeezy-Slide-Pure-Restock-Pair/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:80, name:"Suicoke x BAPE ABC Kaw-Ape Black", img:"https://images.stockx.com/360/Suicoke-x-BAPE-ABC-Kaw-Ape-Black/Images/Suicoke-x-BAPE-ABC-Kaw-Ape-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:81, name:"Suicoke Patch Slider Palm Angels Black", img:"https://images.stockx.com/images/Suicoke-Patch-Slider-Sandal-Palm-Angels-Black.png", cat:"street", catLabel:"스트릿" },
-  { id:82, name:"Suicoke Depa Missoni Black", img:"https://images.stockx.com/images/Suicoke-Depa-Missoni-Black.jpg", cat:"street", catLabel:"스트릿" },
-  { id:83, name:"Suicoke Moto Carhartt WIP Black", img:"https://images.stockx.com/360/Suicoke-Moto-Carhartt-WIP-Black/Images/Suicoke-Moto-Carhartt-WIP-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:84, name:"Nike Offcourt Slide Black White", img:"https://images.stockx.com/360/Nike-Offcourt-Slide-Black-White/Images/Nike-Offcourt-Slide-Black-White/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:85, name:"Nike Kobe Offcourt Slide Black", img:"https://images.stockx.com/360/Nike-Kobe-Offcourt-Slide-Black/Images/Nike-Kobe-Offcourt-Slide-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:86, name:"Nike Asuna Slide Triple Black", img:"https://images.stockx.com/images/Nike-Asuna-Slide-Triple-Black.jpg", cat:"street", catLabel:"스트릿" },
-  { id:87, name:"Nike Asuna Crater Black", img:"https://images.stockx.com/360/Nike-Asuna-Crater-Black/Images/Nike-Asuna-Crater-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:88, name:"Nike Offcourt Slide Black University Red", img:"https://images.stockx.com/360/Nike-Offcourt-Slide-Black-University-Red/Images/Nike-Offcourt-Slide-Black-University-Red/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:89, name:"Nike Offcourt Adjust Slide Black White", img:"https://images.stockx.com/images/Nike-Offcourt-Adjust-Slide-Black-White.jpg", cat:"street", catLabel:"스트릿" },
-  { id:90, name:"Nike Asuna 2 Slide Black White", img:"https://images.stockx.com/360/Nike-Asuna-Slide-2-Black-White/Images/Nike-Asuna-Slide-2-Black-White/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:91, name:"Off-White Slides Black SS18", img:"https://images.stockx.com/images/Off-White-Slides-Black-SS18.jpg", cat:"street", catLabel:"스트릿" },
-  { id:92, name:"Adidas Adilette 22 Slides Black Scarlet", img:"https://images.stockx.com/360/adidas-Adilette-22-Slides-Black-Scarlet/Images/adidas-Adilette-22-Slides-Black-Scarlet/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:93, name:"Adidas Adilette 22 XLG Slides Core Black", img:"https://images.stockx.com/360/adidas-Adilette-22-XLG-Slides-Core-Black/Images/adidas-Adilette-22-XLG-Slides-Core-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:94, name:"Adidas Adilette 22 Core Black Cloud White", img:"https://images.stockx.com/images/adidas-Adilette-22-Core-Black-Cloud-White.jpg", cat:"street", catLabel:"스트릿" },
-  { id:95, name:"Birkenstock Arizona Smooth Leather Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Smooth-Leather-Black.jpg", cat:"street", catLabel:"스트릿" },
-  { id:96, name:"Birkenstock Arizona Rick Owens Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Rick-Owens-Black.jpg", cat:"street", catLabel:"스트릿" },
-  { id:97, name:"Birkenstock Arizona Tech ADERERROR Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Tech-ADERERROR-Black.jpg", cat:"street", catLabel:"스트릿" },
-  { id:98, name:"Birkenstock Arizona Oiled Leather Black", img:"https://images.stockx.com/360/Birkenstock-Arizona-Oiled-Leather-Black/Images/Birkenstock-Arizona-Oiled-Leather-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿" },
-  { id:99, name:"Combat Flip Flops Men's MultiCam Black Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/black-1.png?v=1754433295&width=1000", cat:"tactical", catLabel:"택티컬" },
-  { id:100, name:"Combat Flip Flops Men's Coyote Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/coyote-1.png?v=1754431988&width=1000", cat:"tactical", catLabel:"택티컬" },
-  { id:101, name:"Combat Flip Flops Men's AK-47 Flip Flops", img:"https://www.combatflipflops.com/cdn/shop/files/AK-1.png?v=1759170161&width=2000", cat:"tactical", catLabel:"택티컬" },
-  { id:102, name:"Combat Flip Flops Women's Spartan Race Black Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/women-1.png?v=1754432929&width=5000", cat:"tactical", catLabel:"택티컬" },
-  { id:103, name:"5.11 Tactical Recovery Sandal", img:"https://www.511tactical.com/media/catalog/product/1820035_019_01.jpg", cat:"tactical", catLabel:"택티컬" },
-  { id:104, name:"Demonia Shaker-13 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/products/shaker-13-bvl.jpg?v=1700002653", cat:"gothic", catLabel:"고딕" },
-  { id:105, name:"Demonia Funn-10 Spider Buckle Ankle Strap Sandal", img:"https://demoniacult.com/cdn/shop/products/funn-10-bvl.jpg?v=1646154470", cat:"gothic", catLabel:"고딕" },
-  { id:106, name:"Demonia Emily-100 Bat Buckle Platform Sandal", img:"https://demoniacult.com/cdn/shop/products/emily-100-bvl.jpg?v=1582159441", cat:"gothic", catLabel:"고딕" },
-  { id:107, name:"Demonia Emily-07 Criss-Cross Bat Buckle Sandal", img:"https://demoniacult.com/cdn/shop/products/emily-07-bvlbhg.jpg?v=1673483672", cat:"gothic", catLabel:"고딕" },
-  { id:108, name:"Demonia Camel-17 Spider Buckle Ankle Strap Sandal", img:"https://demoniacult.com/cdn/shop/products/camel-17-bvl_eeac969f-fed2-417f-848e-1719981cc7f9.jpg?v=1646154517", cat:"gothic", catLabel:"고딕" },
-  { id:109, name:"Demonia Ashes-08 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/ashes-08-bvl.jpg?v=1737740502", cat:"gothic", catLabel:"고딕" },
-  { id:110, name:"Demonia Flip-16 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/flip-16-bvl.jpg?v=1736354064", cat:"gothic", catLabel:"고딕" },
-  { id:111, name:"Demonia Dynamite-02 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/products/dynamite-02-bvl_d7adb89a-2a45-4403-b1ec-f037f7556bae.jpg?v=1644339383", cat:"gothic", catLabel:"고딕" },
-  { id:112, name:"Demonia Dolly-09 Black Platform Slide Sandal", img:"https://demoniacult.com/cdn/shop/products/dolly-09-b.jpg?v=1582159183", cat:"gothic", catLabel:"고딕" },
-  { id:113, name:"Demonia Bratty-32 Black Faux Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/bratty-32_blk_faux_leather.jpg?v=1726267257", cat:"gothic", catLabel:"고딕" },
-  { id:114, name:"Killstar Obsidian Night Flat Sandal", img:"https://us.killstar.com/cdn/shop/files/OBSIDIANNIGHTFLATSANDAL_01_400x.jpg?v=1772211808", cat:"gothic", catLabel:"고딕" },
-  { id:115, name:"Killstar Witchblossom Wedge Sandal", img:"https://us.killstar.com/cdn/shop/files/WITCHBLOSSOMWEDGESANDALS_01_400x.jpg?v=1772212277", cat:"gothic", catLabel:"고딕" },
-  { id:116, name:"T.U.K. Black TUKskin Fisherman Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3381_LEFT_OUTSIDE.jpg?v=1761272456", cat:"gothic", catLabel:"고딕" },
-  { id:117, name:"T.U.K. Black Faux Suede 3-Buckle Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3141L_LEFT_OUTSIDE.png?v=1741629969", cat:"gothic", catLabel:"고딕" },
-  { id:118, name:"T.U.K. Black White TUKskin 2-Buckle Viva Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3253L_LEFT_OUTSIDE.jpg?v=1741629925", cat:"gothic", catLabel:"고딕" },
-  { id:119, name:"Pleaser Flamingo-824 Black Platform Ankle Strap Sandal", img:"https://pleasershoes.com/cdn/shop/files/flamingo-824-b_14d72a9d-daff-4237-9c50-c4f26e24da9a.jpg", cat:"gothic", catLabel:"고딕" },
-  { id:120, name:"Pleaser Adore-709 Black Vegan Leather Platform Sandal", img:"https://pleasershoes.com/cdn/shop/files/adore-709-bfl_81a02f8c-de14-40c5-94b9-9fbd227ab28f.jpg", cat:"gothic", catLabel:"고딕" },
-  { id:121, name:"Pleaser Beyond-012 Black Mega Platform Sandal", img:"https://pleasershoes.com/cdn/shop/files/beyond-012-b_99a62cc0-593d-48aa-bb67-1557bc910d34.jpg", cat:"gothic", catLabel:"고딕" },
-  { id:122, name:"Strange Cvlt Betty Bat Black Sandal", img:"https://strangecvlt.com/cdn/shop/products/BettyBatBlack.jpg?v=1762443437", cat:"gothic", catLabel:"고딕" },
-  { id:123, name:"Dolls Kill Widow Spiked Punk Goth Platform Sandals", img:"https://www.dollskill.com/cdn/shop/products/s1867258_f_r_widow_spiked_bubble_sandal_black_290417_201.jpg?v=1708475090", cat:"gothic", catLabel:"고딕" },
-  { id:124, name:"Birkenstock Arizona Oiled Leather Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwdd76d7bb/552113/552113.jpg", cat:"classic", catLabel:"클래식" },
-  { id:125, name:"Birkenstock Boston Shearling Suede Leather Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwe53b6b3c/259883/259883.jpg", cat:"classic", catLabel:"클래식" },
-  { id:126, name:"Birkenstock Madrid Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw3904de9c/40793/40793.jpg", cat:"classic", catLabel:"클래식" },
-  { id:127, name:"Birkenstock Gizeh Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw5ce125cb/43693/43693.jpg", cat:"classic", catLabel:"클래식" },
-  { id:128, name:"Birkenstock Mayari Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwd0941284/71791/71791.jpg", cat:"classic", catLabel:"클래식" },
-  { id:129, name:"Birkenstock Milano Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw178060cd/34793/34793.jpg", cat:"classic", catLabel:"클래식" },
-  { id:130, name:"Dr. Martens Voss II Leather Strap Black", img:"https://m.media-amazon.com/images/I/71NjJcjKoOL._SX700_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:131, name:"Dr. Martens Voss II Athena Strap Black", img:"https://m.media-amazon.com/images/I/611GJ8DleuL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:132, name:"Dr. Martens Myles Leather Slide Black", img:"https://m.media-amazon.com/images/I/61AlbQrsBdL._SX700_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:133, name:"Dr. Martens Blaire Leather Slide Black", img:"https://m.media-amazon.com/images/I/713dTgkppAL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:134, name:"Dr. Martens Kassion Shore Black", img:"https://m.media-amazon.com/images/I/714g6yxf-BL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:135, name:"Jerusalem Sandals David Black Leather", img:"https://jerusalemsandals.com/cdn/shop/products/david-black-slip-on-jrslm-912535.jpg?v=1570578355", cat:"classic", catLabel:"클래식" },
-  { id:136, name:"Teva Hurricane XLT2 Black", img:"https://m.media-amazon.com/images/I/71eWe+4SYrL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:137, name:"Teva Original Universal Borderless Black", img:"https://m.media-amazon.com/images/I/61y3Oq0gQfL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:138, name:"Chaco Z/1 Classic Black", img:"https://thekit.wolverineworldwide.com/match/media_lookup/CHAM-J105375-061615-S16-000/?preset=dw-large", cat:"classic", catLabel:"클래식" },
-  { id:139, name:"Keen Newport H2 Black", img:"https://cdn.shopify.com/s/files/1/0607/3263/7348/files/preview_images/5a5167b8c6ac7b436fb45b8fd612d73c24494900.jpg?v=1745866580", cat:"classic", catLabel:"클래식" },
-  { id:140, name:"Clarks Sunder Range Black Nubuck", img:"https://m.media-amazon.com/images/I/81Ityk6nrmL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식" },
-  { id:141, name:"Our Legacy Ginza Deep Black Leather Sandal", img:"https://ourlegacy.centracdn.net/client/dynamic/images/14665_5edd0b80ed-a2267gd_1-rtail-big.jpg", cat:"minimal", catLabel:"미니멀" },
-  { id:142, name:"Uniqlo Slide Sandals Black", img:"https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/466332/item/goods_09_466332_3x4.jpg", cat:"minimal", catLabel:"미니멀" },
-  { id:143, name:"adidas Adilette Slide Black", img:"https://m.media-amazon.com/images/I/511HRSpgClL._AC_SR768,1024_.jpg", cat:"minimal", catLabel:"미니멀" },
-  { id:144, name:"Crocs Classic Slide Black", img:"https://m.media-amazon.com/images/I/61jg8EolxQL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:145, name:"Crocs LiteRide Slide Black", img:"https://m.media-amazon.com/images/I/51RB8H1qNHL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:146, name:"Nike Benassi JDI Slide Black", img:"https://m.media-amazon.com/images/I/61-n-u0bvAL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:147, name:"Nike ACG Air Deschutz+ Black", img:"https://static.nike.com/a/images/t_default/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/663de136-d4c9-414c-bf51-141e3fc075e6/ACG+AIR+DESCHUTZ%2B.png", cat:"aqua", catLabel:"아쿠아" },
-  { id:148, name:"Merrell Hydro Moc Black", img:"https://m.media-amazon.com/images/I/71A+PfVZH4L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:149, name:"Merrell Hydro Next Gen Moc Black", img:"https://m.media-amazon.com/images/I/71ab3tGS-2L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:150, name:"Speedo Surfwalker Pro 3.0 Black", img:"https://m.media-amazon.com/images/I/818rqRCEA7L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아" },
-  { id:151, name:"Prada Triangle Logo Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/22/57/87/12/22578712_52564710_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:152, name:"Prada Crisscross Rubber Slides Black", img:"https://cdn-images.farfetch-contents.com/34/17/32/36/34173236_65180758_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:153, name:"Prada Logo Plaque Brushed Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/19/88/74/25/19887425_44586683_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:154, name:"Prada Leather Crisscross Slides Black", img:"https://cdn-images.farfetch-contents.com/22/96/54/44/22965444_53074701_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:155, name:"Prada 70mm Monolith Caged Rubber Sandals Black", img:"https://cdn-images.farfetch-contents.com/20/03/13/38/20031338_45027992_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:156, name:"Prada Padded Nappa Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/28/21/58/39/28215839_57669612_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:157, name:"Gucci GG-printed Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/29/83/20/59/29832059_58882876_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:158, name:"Gucci Pursuit Web Slides Black", img:"https://cdn-images.farfetch-contents.com/12/72/88/51/12728851_53119417_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:159, name:"Gucci Interlocking G Sandals Black", img:"https://cdn-images.farfetch-contents.com/19/80/58/75/19805875_53139635_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:160, name:"Gucci GG-pattern Padded Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/92/88/61/30928861_59901370_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:161, name:"Bottega Veneta 120mm Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/29/94/34/31299434_60599776_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:162, name:"Bottega Veneta Lido Quilted Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/53/95/09/33539509_64323694_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:163, name:"Bottega Veneta Intrecciato Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/34/17/02/30341702_60052836_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:164, name:"Bottega Veneta 130mm Platform Cross-strap Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/32/83/96/30328396_59966176_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:165, name:"Celine 105mm Suede Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/34/55/78/30345578_59440658_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:166, name:"Celine Crystal-embellished Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/52/81/81/33528181_64293030_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:167, name:"Celine Ankle-strap Suede Heels Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/38/97/46/33389746_64077566_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:168, name:"Saint Laurent 120mm La Scandale Platform Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/17/95/54/30179554_59763093_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:169, name:"Saint Laurent Babylone Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/10/88/25/30108825_59192890_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:170, name:"Saint Laurent Tribute Flat Sandals Black", img:"https://cdn-images.farfetch-contents.com/13/90/08/39/13900839_54738132_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:171, name:"Saint Laurent Cassandra Sandals Black", img:"https://cdn-images.farfetch-contents.com/22/82/99/21/22829921_53104837_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:172, name:"Saint Laurent 110mm Twist-detail Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/69/40/55/31694055_61217216_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:173, name:"Valentino Garavani VLTN Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/14/71/23/19/14712319_37541479_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:174, name:"Valentino Garavani Rockstud Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/12/52/25/24/12522524_52386099_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:175, name:"Valentino Garavani VLogo Signature Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/18/19/03/00/18190300_39003845_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:176, name:"Valentino Garavani Rockstud Thong Slides Black", img:"https://cdn-images.farfetch-contents.com/14/88/30/61/14883061_24187286_1000.jpg", cat:"luxury", catLabel:"럭셔리" },
-  { id:177, name:"Maison Margiela Tabi Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/16/80/11/62/16801162_34375420_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:178, name:"Maison Margiela Tabi Toe Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/16/03/01/42/16030142_30720994_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:179, name:"Guidi Lace-up Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/22/92/41/54/22924154_53086737_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:180, name:"Guidi Leather Mules Black", img:"https://cdn-images.farfetch-contents.com/30/08/81/81/30088181_59485570_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:181, name:"Marsell Sottile Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/27/35/14/66/27351466_57346375_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:182, name:"Yohji Yamamoto Lace-up Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/23/44/93/86/23449386_53605383_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:183, name:"Yohji Yamamoto Open-toe Sandals Black", img:"https://cdn-images.farfetch-contents.com/35/47/22/45/35472245_67030181_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:184, name:"Yohji Yamamoto Knotted Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/42/52/01/31425201_61406584_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:185, name:"Yohji Yamamoto Platform Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/78/79/05/33787905_64676016_1000.jpg", cat:"highend", catLabel:"하이엔드" },
-  { id:186, name:"Yohji Yamamoto 40mm Geta Sandals Black", img:"https://cdn-images.farfetch-contents.com/29/99/52/31/29995231_59140828_1000.jpg", cat:"highend", catLabel:"하이엔드" }
+  { id:1, name:"Combat Flip Flops Overland Black", img:"https://www.combatflipflops.com/cdn/shop/products/Overland-Side-Outsole-Pair_496f2e72-8ed8-4434-916e-1760d45732fe.png?v=1680726740", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:2, name:"MIL-TEC Combat Sandals", img:"https://www.americanapipedream.com/cdn/shop/files/CombatFlopsTop.jpg?v=1750174442", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:3, name:"Suicoke MOTO-CAB Black", img:"https://www.blendsus.com/cdn/shop/products/suicoke-OG-056CAB-BLK-1.jpg?v=1623886415", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:4, name:"Suicoke KAW-VS Suede Slide Black", img:"https://wefashionssny.com/cdn/shop/files/58_aad19241-80be-43cd-a652-1e15253a624e.png?v=1745945235", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:5, name:"Peter Do Black Combat Sandals", img:"https://cdn.modesens.com/availability/49953676?w=1024", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:6, name:"Xti Combat Sandals Black", img:"https://cdna.lystit.com/1040/1300/n/photos/shoppremiumoutlets/c8ea6654/xti-black-Combat-Sandals-By-_.jpeg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:7, name:"Rick Owens DRKSHDW Rubber Slide Black", img:"https://www.doshaburi.com/cdn/shop/products/dsm23ss-251.jpg?v=1680793063", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:8, name:"New Rock Metallic Punk Velcro Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-metallic-punk-rock-black-velcro-sandals-008.png?v=1745822537", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:9, name:"New Rock Chunky Buckle Platform Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-chunky-black-buckle-platform-sandals-004.png?v=1717675196", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:10, name:"New Rock Bio Black Tower Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-bio-black-tower-sandals-unisex-gothic-footwear-008.png?v=1717673866", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:11, name:"New Rock Black Buckled Platform Urban", img:"https://hardnheavy.style/cdn/shop/files/new-rock-black-buckled-platform-sandals-in-urban-style-001.png?v=1717653280", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:12, name:"New Rock Gothic Platform Buckle Zipper", img:"https://hardnheavy.style/cdn/shop/files/new-rock-male-gothic-platform-sandals-with-buckles-and-zipper-002.png?v=1738670407", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:13, name:"New Rock Platform Zippers Buckles", img:"https://hardnheavy.style/cdn/shop/files/new-rock-mens-platform-sandals-with-zippers-and-buckles-008.png?v=1738655624", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:14, name:"New Rock Gothic Punk Buckle Sandals", img:"https://hardnheavy.style/cdn/shop/files/new-rock-mens-black-gothic-punk-buckle-sandals-002.png?v=1738653226", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:15, name:"PU Leather Luxury Flip Flops", img:"https://hardnheavy.style/cdn/shop/files/stylish-male-pu-leather-slippers-luxury-flip-flops-for-men-fashion-open-shoes-003.png?v=1692127956", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:16, name:"Jerusalem Sandals Peter Black", img:"https://jerusalemsandals.com/cdn/shop/products/83-blk-1.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:17, name:"Either/Or Woven Leather Slide Black", img:"https://shopeitheror.com/cdn/shop/files/Either-Or-Handmade-Woven-Leather-Mule_Slide_Sandals-Flat-Ethical-Sustainable_Black_Top_Side.jpg?v=1773189711", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:18, name:"Suicoke MOTO-Run Black", img:"https://www.gravitypope.com/cdn/shop/files/332-BLK_01.jpg?v=1699733116", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:19, name:"Suicoke Streetwear Staple", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/09174722/SUICOKE-Sandals-Slides_-A-Streetwear-Staple.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:20, name:"Rick Owens x Birkenstock Arizona Black", img:"https://www.svrn.com/cdn/shop/products/birkenstock-arizona-in-black-unisex-sandals-rick-owens-svrn-chicago-28225451589705.png?v=1633005540", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:21, name:"Rick Owens x Birkenstock Iridescent", img:"https://cdn11.bigcommerce.com/s-826bu71r58/images/stencil/1280x1280/products/2638/17895/5.27.birkenstock2.1__01935.1659369326.jpg?c=2", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:22, name:"T.U.K. Black 3-Buckle Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/products/V9880L_LEFT_OUTSIDE.jpg?v=1741630011", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:23, name:"All Black One Side Leather Slide", img:"https://shopeechicago.com/cdn/shop/files/all-black-one-side-slide-black-black-36-shoetique-all-black-essential-elements-chicago-0o7_grande.jpg?v=1775129239", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:24, name:"Madison Maison Hammered Hardware Sandal", img:"https://www.madisonstyle.com/cdn/shop/files/a4-108-black-1.jpg?v=1775677964", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:25, name:"MIKUTA Black Leather Buckle Sandal", img:"https://mikuta.com/cdn/shop/files/mikuta-the-black-leather-buckle-sandals-ss26-product-shot-2393.jpg?v=1775912709", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:26, name:"Jerusalem Sandals Barak Black Buckle", img:"https://jerusalemsandals.com/cdn/shop/files/104_Black_size_43-01.jpg?v=1748406382", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:27, name:"The Row Black Buckle Sandal", img:"https://savannahs.com/cdn/shop/files/250204_380.jpg?v=1775928884&width=1365", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:28, name:"Suicoke x TOGA Collaboration", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/10134018/TC241-AJ511_04-683x1024.webp", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:29, name:"Rick Owens Black Sandals Leather 1", img:"https://cdna.lystit.com/photos/yoox/71912dde/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:30, name:"Rick Owens Black Sandals Leather 2", img:"https://cdna.lystit.com/photos/yoox/0f915943/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:31, name:"Rick Owens Black Sandals Leather 3", img:"https://cdna.lystit.com/photos/yoox/a6689f74/rick-owens-Black-Sandals-Leather.jpeg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:32, name:"Rick Owens Black Textile Sandals", img:"https://cdna.lystit.com/photos/yoox/f1a13e11/rick-owens-Black-Sandals-Textile-Fibers.jpeg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:33, name:"Dr. Martens x Rick Owens Gryphon", img:"https://cdn.media.amplience.net/i/drmartens/27031001.80.jpg?$medium$", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:34, name:"Balenciaga Logo-Embossed Pool Slides", img:"https://cdn-images.farfetch-contents.com/21/72/33/06/21723306_59714563_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:35, name:"Balenciaga Logo-Embroidered Slides", img:"https://cdn-images.farfetch-contents.com/29/54/13/40/29541340_58643118_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:36, name:"Balenciaga Zero Toe-Loop Slides", img:"https://cdn-images.farfetch-contents.com/30/85/06/42/30850642_59810355_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:37, name:"Balenciaga BB Logo-Print Slides", img:"https://cdn-images.farfetch-contents.com/28/45/01/35/28450135_57842343_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:38, name:"Balenciaga BB-Monogram Leather Slides", img:"https://cdn-images.farfetch-contents.com/19/29/37/68/19293768_59714452_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:39, name:"Balenciaga Zero Slides", img:"https://cdn-images.farfetch-contents.com/30/95/33/25/30953325_59855359_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:40, name:"Balenciaga Perforated Slides", img:"https://cdn-images.farfetch-contents.com/35/07/56/12/35075612_66280316_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:41, name:"Balenciaga x Scholl Buckle Slides", img:"https://cdn-images.farfetch-contents.com/31/12/45/56/31124556_60567263_480.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:42, name:"Yeezy Slide Onyx Black", img:"https://www.stadiumgoods.com/cdn/shop/files/yg0pdcdfkt986edq3nycynfeewz5.png?crop=center&height=1024&v=1769536461&width=1024", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:43, name:"Off-White Industrial Logo Slide", img:"https://cdn.modesens.com/availability/40759848?w=1024", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:44, name:"Whistles Rocco Black Velcro Sandal", img:"https://www.whistles.com/dw/image/v2/BDCH_PRD/on/demandware.static/-/Sites-whistles-master-catalog/default/dw4455439e/images/01603497601/whistles-rocco-velcro-sandal-black-01.jpg?sw=1000&sh=1400&strip=false", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:45, name:"PEDRO Black Velcro Slip-On Sandal", img:"https://www.pedroshoes.com/dw/image/v2/BCWJ_PRD/on/demandware.static/-/Sites-pd-products/default/dwcf62689a/images/hi-res/2025-L2-PW1-65490199-01-1.jpg?sw=1152&sh=1536&q=80", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:46, name:"Suzanne Rae Black Velcro Sandal", img:"https://suzannerae.com/cdn/shop/products/ss19_velcro_sandal_black-1.jpg?v=1555948695", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:47, name:"VIKTOS Ruck Recovery SF Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/590/2696/Ruck-Recovery-SF-Slide-Murkwood-Camo-Profile__19343.1748958003.jpg?c=1", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:48, name:"VIKTOS Ruck Recovery XC Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/208/1293/Ruck-Recovery-XC-Sandal-Greyman-Profile__87258.1748961793.jpg?c=1", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:49, name:"VIKTOS Ruck Recovery MC Tactical", img:"https://cdn11.bigcommerce.com/s-miz4dnhysj/images/stencil/500x659/products/479/2370/Ruck-Recovery-MC-Slide-Multicam-Profile__94181.1748958561.jpg?c=1", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:50, name:"Suicoke DEPA-2 Black", img:"https://suicoke.com/cdn/shop/files/NOG-022-2-Black_V1.jpg?v=1772791604", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:51, name:"Suicoke KISEE Black", img:"https://suicoke.com/cdn/shop/files/NOG-044-Black_V1.jpg?v=1772791614", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:52, name:"Suicoke MOTO Black Official", img:"https://suicoke.com/cdn/shop/files/NOG-056-Black_V1.jpg?v=1772791620", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:53, name:"Suicoke x Space Available Collab", img:"https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2025%2F05%2F07%2Fsuicoke-x-space-available-sandal-collaboration-release-info-001.jpg?q=75&w=800&cbr=1&fit=max", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:54, name:"Birkenstock Arizona EVA Black", img:"https://www.birkenstock.com/dw/image/v2/BLZD_PRD/on/demandware.static/-/Sites-master-catalog-amer/default/dw6172c109/129421/129421.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:55, name:"Birkenstock Barbados EVA Black", img:"https://www.birkenstock.com/dw/image/v2/BLZD_PRD/on/demandware.static/-/Sites-master-catalog-amer/default/dw4e36889b/1015398/1015398.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:56, name:"Nike Calm Slides Black", img:"https://images.footlocker.com/is/image/EBFL2/D4116001?wid=800&hei=800", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:57, name:"Nike Victori One Triple Black", img:"https://images.footlocker.com/is/image/EBFL2/N9675003?wid=800&hei=800", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:58, name:"Nike Reactx Rejuven8 Black", img:"https://images.footlocker.com/is/image/EBFL2/HV447900?wid=800&hei=800", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:59, name:"Nike Benassi JDI Black", img:"https://images.footlocker.com/is/image/EBFL2/43880090?wid=800&hei=800", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:60, name:"The North Face Base Camp III Black", img:"https://www.gearx.com/cdn/shop/files/nf0a4t2r_ky4_detailinstep.jpg?v=1753798468", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:61, name:"Givenchy Slide Black", img:"https://feature.com/cdn/shop/products/Givenchy-Slide-Sandals---Black-BH301TH1DB001-11-29-22-Feature-JM-VR2.jpg?v=1669755891&width=1200", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:62, name:"Suicoke MOTO-CAB Uncrate", img:"https://shop.uncrate.com/cdn/shop/files/suicoke-moto-cab-sandals-5.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:63, name:"Dr. Martens Josef Buckle Slide", img:"https://cdn.media.amplience.net/i/drmartens/31570001.80.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:64, name:"Black Gladiator Stud Leather", img:"https://i.pinimg.com/736x/d1/3d/e6/d13de64389cdc05433e1c2a5e0b5bc38.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:65, name:"Boot/Sandal Hybrid", img:"https://i.pinimg.com/736x/3a/89/d1/3a89d1e810846409f362693f22b527e1.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:66, name:"Black Leather Buckle Sandal", img:"https://i.pinimg.com/736x/96/fc/9c/96fc9c3e20768f59ce7dbcdd6554f92d.jpg", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:67, name:"Multi-Strap Combat Sandal", img:"https://i.pinimg.com/736x/cc/f2/ac/ccf2ac965b5691d1b115877f19783f5b.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:68, name:"Suicoke SS24 Campaign", img:"https://snkrdunk.s3.ap-northeast-1.amazonaws.com/en/magazine/wp-content/uploads/2025/01/10134702/3_e5e16ba1-6496-4102-bb80-966d8b1d5fa8-1024x576.webp", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:69, name:"Nike Calm Slides 2.0 Black", img:"https://images.footlocker.com/is/image/EBFL2/B0183001?wid=800&hei=800", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:70, name:"Off-White Industrial Slide 2", img:"https://cdn.modesens.com/media/126371771?w=1024", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:71, name:"Yeezy Slide Dark Onyx", img:"https://www.stadiumgoods.com/cdn/shop/files/3934bn3fepl6ewvywa1sgupiy9p9.png?v=1769530627", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:72, name:"Yeezy Slide Onyx Front", img:"https://solematesneakers.com/cdn/shop/products/image_d6f03c06-e4b1-4dc3-895a-c1e9dd39618c.jpg?v=1648442975", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:73, name:"Yeezy Slide Onyx Alt", img:"https://sportsconnectionpa.com/cdn/shop/files/Yeezyonyxslide.png?v=1697229273", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:74, name:"Adidas Yeezy Slide Pure", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Pure/Images/adidas-Yeezy-Slide-Pure/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:75, name:"Adidas Yeezy Slide Core", img:"https://images.stockx.com/360/Yeezy-Slide-Core/Images/Yeezy-Slide-Core/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:76, name:"Adidas Yeezy Slide Soot", img:"https://images.stockx.com/360/Yeezy-Slide-Soot/Images/Yeezy-Slide-Soot/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:77, name:"Adidas Yeezy Slide Bone", img:"https://images.stockx.com/360/Yeezy-Slide-Bone/Images/Yeezy-Slide-Bone/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:78, name:"Adidas Yeezy Slide Resin 2022", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Resin-2022/Images/adidas-Yeezy-Slide-Resin-2022/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:79, name:"Adidas Yeezy Slide Pure Restock", img:"https://images.stockx.com/360/adidas-Yeezy-Slide-Pure-Restock-Pair/Images/adidas-Yeezy-Slide-Pure-Restock-Pair/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:80, name:"Suicoke x BAPE ABC Kaw-Ape Black", img:"https://images.stockx.com/360/Suicoke-x-BAPE-ABC-Kaw-Ape-Black/Images/Suicoke-x-BAPE-ABC-Kaw-Ape-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:81, name:"Suicoke Patch Slider Palm Angels Black", img:"https://images.stockx.com/images/Suicoke-Patch-Slider-Sandal-Palm-Angels-Black.png", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:82, name:"Suicoke Depa Missoni Black", img:"https://images.stockx.com/images/Suicoke-Depa-Missoni-Black.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:83, name:"Suicoke Moto Carhartt WIP Black", img:"https://images.stockx.com/360/Suicoke-Moto-Carhartt-WIP-Black/Images/Suicoke-Moto-Carhartt-WIP-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:84, name:"Nike Offcourt Slide Black White", img:"https://images.stockx.com/360/Nike-Offcourt-Slide-Black-White/Images/Nike-Offcourt-Slide-Black-White/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:85, name:"Nike Kobe Offcourt Slide Black", img:"https://images.stockx.com/360/Nike-Kobe-Offcourt-Slide-Black/Images/Nike-Kobe-Offcourt-Slide-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:86, name:"Nike Asuna Slide Triple Black", img:"https://images.stockx.com/images/Nike-Asuna-Slide-Triple-Black.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:87, name:"Nike Asuna Crater Black", img:"https://images.stockx.com/360/Nike-Asuna-Crater-Black/Images/Nike-Asuna-Crater-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:88, name:"Nike Offcourt Slide Black University Red", img:"https://images.stockx.com/360/Nike-Offcourt-Slide-Black-University-Red/Images/Nike-Offcourt-Slide-Black-University-Red/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:89, name:"Nike Offcourt Adjust Slide Black White", img:"https://images.stockx.com/images/Nike-Offcourt-Adjust-Slide-Black-White.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:90, name:"Nike Asuna 2 Slide Black White", img:"https://images.stockx.com/360/Nike-Asuna-Slide-2-Black-White/Images/Nike-Asuna-Slide-2-Black-White/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:91, name:"Off-White Slides Black SS18", img:"https://images.stockx.com/images/Off-White-Slides-Black-SS18.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:92, name:"Adidas Adilette 22 Slides Black Scarlet", img:"https://images.stockx.com/360/adidas-Adilette-22-Slides-Black-Scarlet/Images/adidas-Adilette-22-Slides-Black-Scarlet/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:93, name:"Adidas Adilette 22 XLG Slides Core Black", img:"https://images.stockx.com/360/adidas-Adilette-22-XLG-Slides-Core-Black/Images/adidas-Adilette-22-XLG-Slides-Core-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:94, name:"Adidas Adilette 22 Core Black Cloud White", img:"https://images.stockx.com/images/adidas-Adilette-22-Core-Black-Cloud-White.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:95, name:"Birkenstock Arizona Smooth Leather Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Smooth-Leather-Black.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:96, name:"Birkenstock Arizona Rick Owens Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Rick-Owens-Black.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:97, name:"Birkenstock Arizona Tech ADERERROR Black", img:"https://images.stockx.com/images/Birkenstock-Arizona-Tech-ADERERROR-Black.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:98, name:"Birkenstock Arizona Oiled Leather Black", img:"https://images.stockx.com/360/Birkenstock-Arizona-Oiled-Leather-Black/Images/Birkenstock-Arizona-Oiled-Leather-Black/Lv2/img01.jpg", cat:"street", catLabel:"스트릿", source:"scraped" },
+  { id:99, name:"Combat Flip Flops Men's MultiCam Black Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/black-1.png?v=1754433295&width=1000", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:100, name:"Combat Flip Flops Men's Coyote Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/coyote-1.png?v=1754431988&width=1000", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:101, name:"Combat Flip Flops Men's AK-47 Flip Flops", img:"https://www.combatflipflops.com/cdn/shop/files/AK-1.png?v=1759170161&width=2000", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:102, name:"Combat Flip Flops Women's Spartan Race Black Floperator", img:"https://www.combatflipflops.com/cdn/shop/files/women-1.png?v=1754432929&width=5000", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:103, name:"5.11 Tactical Recovery Sandal", img:"https://www.511tactical.com/media/catalog/product/1820035_019_01.jpg", cat:"tactical", catLabel:"택티컬", source:"scraped" },
+  { id:104, name:"Demonia Shaker-13 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/products/shaker-13-bvl.jpg?v=1700002653", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:105, name:"Demonia Funn-10 Spider Buckle Ankle Strap Sandal", img:"https://demoniacult.com/cdn/shop/products/funn-10-bvl.jpg?v=1646154470", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:106, name:"Demonia Emily-100 Bat Buckle Platform Sandal", img:"https://demoniacult.com/cdn/shop/products/emily-100-bvl.jpg?v=1582159441", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:107, name:"Demonia Emily-07 Criss-Cross Bat Buckle Sandal", img:"https://demoniacult.com/cdn/shop/products/emily-07-bvlbhg.jpg?v=1673483672", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:108, name:"Demonia Camel-17 Spider Buckle Ankle Strap Sandal", img:"https://demoniacult.com/cdn/shop/products/camel-17-bvl_eeac969f-fed2-417f-848e-1719981cc7f9.jpg?v=1646154517", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:109, name:"Demonia Ashes-08 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/ashes-08-bvl.jpg?v=1737740502", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:110, name:"Demonia Flip-16 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/flip-16-bvl.jpg?v=1736354064", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:111, name:"Demonia Dynamite-02 Black Vegan Leather Sandal", img:"https://demoniacult.com/cdn/shop/products/dynamite-02-bvl_d7adb89a-2a45-4403-b1ec-f037f7556bae.jpg?v=1644339383", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:112, name:"Demonia Dolly-09 Black Platform Slide Sandal", img:"https://demoniacult.com/cdn/shop/products/dolly-09-b.jpg?v=1582159183", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:113, name:"Demonia Bratty-32 Black Faux Leather Sandal", img:"https://demoniacult.com/cdn/shop/files/bratty-32_blk_faux_leather.jpg?v=1726267257", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:114, name:"Killstar Obsidian Night Flat Sandal", img:"https://us.killstar.com/cdn/shop/files/OBSIDIANNIGHTFLATSANDAL_01_400x.jpg?v=1772211808", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:115, name:"Killstar Witchblossom Wedge Sandal", img:"https://us.killstar.com/cdn/shop/files/WITCHBLOSSOMWEDGESANDALS_01_400x.jpg?v=1772212277", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:116, name:"T.U.K. Black TUKskin Fisherman Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3381_LEFT_OUTSIDE.jpg?v=1761272456", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:117, name:"T.U.K. Black Faux Suede 3-Buckle Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3141L_LEFT_OUTSIDE.png?v=1741629969", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:118, name:"T.U.K. Black White TUKskin 2-Buckle Viva Mondo Sandal", img:"https://www.tukshoes.com/cdn/shop/files/V3253L_LEFT_OUTSIDE.jpg?v=1741629925", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:119, name:"Pleaser Flamingo-824 Black Platform Ankle Strap Sandal", img:"https://pleasershoes.com/cdn/shop/files/flamingo-824-b_14d72a9d-daff-4237-9c50-c4f26e24da9a.jpg", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:120, name:"Pleaser Adore-709 Black Vegan Leather Platform Sandal", img:"https://pleasershoes.com/cdn/shop/files/adore-709-bfl_81a02f8c-de14-40c5-94b9-9fbd227ab28f.jpg", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:121, name:"Pleaser Beyond-012 Black Mega Platform Sandal", img:"https://pleasershoes.com/cdn/shop/files/beyond-012-b_99a62cc0-593d-48aa-bb67-1557bc910d34.jpg", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:122, name:"Strange Cvlt Betty Bat Black Sandal", img:"https://strangecvlt.com/cdn/shop/products/BettyBatBlack.jpg?v=1762443437", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:123, name:"Dolls Kill Widow Spiked Punk Goth Platform Sandals", img:"https://www.dollskill.com/cdn/shop/products/s1867258_f_r_widow_spiked_bubble_sandal_black_290417_201.jpg?v=1708475090", cat:"gothic", catLabel:"고딕", source:"scraped" },
+  { id:124, name:"Birkenstock Arizona Oiled Leather Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwdd76d7bb/552113/552113.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:125, name:"Birkenstock Boston Shearling Suede Leather Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwe53b6b3c/259883/259883.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:126, name:"Birkenstock Madrid Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw3904de9c/40793/40793.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:127, name:"Birkenstock Gizeh Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw5ce125cb/43693/43693.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:128, name:"Birkenstock Mayari Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dwd0941284/71791/71791.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:129, name:"Birkenstock Milano Birko-Flor Black", img:"https://www.birkenstock.com/on/demandware.static/-/Sites-master-catalog-amer/default/dw178060cd/34793/34793.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:130, name:"Dr. Martens Voss II Leather Strap Black", img:"https://m.media-amazon.com/images/I/71NjJcjKoOL._SX700_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:131, name:"Dr. Martens Voss II Athena Strap Black", img:"https://m.media-amazon.com/images/I/611GJ8DleuL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:132, name:"Dr. Martens Myles Leather Slide Black", img:"https://m.media-amazon.com/images/I/61AlbQrsBdL._SX700_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:133, name:"Dr. Martens Blaire Leather Slide Black", img:"https://m.media-amazon.com/images/I/713dTgkppAL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:134, name:"Dr. Martens Kassion Shore Black", img:"https://m.media-amazon.com/images/I/714g6yxf-BL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:135, name:"Jerusalem Sandals David Black Leather", img:"https://jerusalemsandals.com/cdn/shop/products/david-black-slip-on-jrslm-912535.jpg?v=1570578355", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:136, name:"Teva Hurricane XLT2 Black", img:"https://m.media-amazon.com/images/I/71eWe+4SYrL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:137, name:"Teva Original Universal Borderless Black", img:"https://m.media-amazon.com/images/I/61y3Oq0gQfL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:138, name:"Chaco Z/1 Classic Black", img:"https://thekit.wolverineworldwide.com/match/media_lookup/CHAM-J105375-061615-S16-000/?preset=dw-large", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:139, name:"Keen Newport H2 Black", img:"https://cdn.shopify.com/s/files/1/0607/3263/7348/files/preview_images/5a5167b8c6ac7b436fb45b8fd612d73c24494900.jpg?v=1745866580", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:140, name:"Clarks Sunder Range Black Nubuck", img:"https://m.media-amazon.com/images/I/81Ityk6nrmL._AC_SR768,1024_.jpg", cat:"classic", catLabel:"클래식", source:"scraped" },
+  { id:141, name:"Our Legacy Ginza Deep Black Leather Sandal", img:"https://ourlegacy.centracdn.net/client/dynamic/images/14665_5edd0b80ed-a2267gd_1-rtail-big.jpg", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:142, name:"Uniqlo Slide Sandals Black", img:"https://image.uniqlo.com/UQ/ST3/WesternCommon/imagesgoods/466332/item/goods_09_466332_3x4.jpg", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:143, name:"adidas Adilette Slide Black", img:"https://m.media-amazon.com/images/I/511HRSpgClL._AC_SR768,1024_.jpg", cat:"minimal", catLabel:"미니멀", source:"scraped" },
+  { id:144, name:"Crocs Classic Slide Black", img:"https://m.media-amazon.com/images/I/61jg8EolxQL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:145, name:"Crocs LiteRide Slide Black", img:"https://m.media-amazon.com/images/I/51RB8H1qNHL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:146, name:"Nike Benassi JDI Slide Black", img:"https://m.media-amazon.com/images/I/61-n-u0bvAL._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:147, name:"Nike ACG Air Deschutz+ Black", img:"https://static.nike.com/a/images/t_default/u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/663de136-d4c9-414c-bf51-141e3fc075e6/ACG+AIR+DESCHUTZ%2B.png", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:148, name:"Merrell Hydro Moc Black", img:"https://m.media-amazon.com/images/I/71A+PfVZH4L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:149, name:"Merrell Hydro Next Gen Moc Black", img:"https://m.media-amazon.com/images/I/71ab3tGS-2L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:150, name:"Speedo Surfwalker Pro 3.0 Black", img:"https://m.media-amazon.com/images/I/818rqRCEA7L._AC_SR768,1024_.jpg", cat:"aqua", catLabel:"아쿠아", source:"scraped" },
+  { id:151, name:"Prada Triangle Logo Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/22/57/87/12/22578712_52564710_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:152, name:"Prada Crisscross Rubber Slides Black", img:"https://cdn-images.farfetch-contents.com/34/17/32/36/34173236_65180758_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:153, name:"Prada Logo Plaque Brushed Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/19/88/74/25/19887425_44586683_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:154, name:"Prada Leather Crisscross Slides Black", img:"https://cdn-images.farfetch-contents.com/22/96/54/44/22965444_53074701_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:155, name:"Prada 70mm Monolith Caged Rubber Sandals Black", img:"https://cdn-images.farfetch-contents.com/20/03/13/38/20031338_45027992_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:156, name:"Prada Padded Nappa Leather Slides Black", img:"https://cdn-images.farfetch-contents.com/28/21/58/39/28215839_57669612_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:157, name:"Gucci GG-printed Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/29/83/20/59/29832059_58882876_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:158, name:"Gucci Pursuit Web Slides Black", img:"https://cdn-images.farfetch-contents.com/12/72/88/51/12728851_53119417_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:159, name:"Gucci Interlocking G Sandals Black", img:"https://cdn-images.farfetch-contents.com/19/80/58/75/19805875_53139635_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:160, name:"Gucci GG-pattern Padded Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/92/88/61/30928861_59901370_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:161, name:"Bottega Veneta 120mm Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/29/94/34/31299434_60599776_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:162, name:"Bottega Veneta Lido Quilted Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/53/95/09/33539509_64323694_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:163, name:"Bottega Veneta Intrecciato Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/34/17/02/30341702_60052836_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:164, name:"Bottega Veneta 130mm Platform Cross-strap Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/32/83/96/30328396_59966176_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:165, name:"Celine 105mm Suede Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/34/55/78/30345578_59440658_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:166, name:"Celine Crystal-embellished Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/52/81/81/33528181_64293030_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:167, name:"Celine Ankle-strap Suede Heels Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/38/97/46/33389746_64077566_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:168, name:"Saint Laurent 120mm La Scandale Platform Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/17/95/54/30179554_59763093_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:169, name:"Saint Laurent Babylone Sandals Black", img:"https://cdn-images.farfetch-contents.com/30/10/88/25/30108825_59192890_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:170, name:"Saint Laurent Tribute Flat Sandals Black", img:"https://cdn-images.farfetch-contents.com/13/90/08/39/13900839_54738132_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:171, name:"Saint Laurent Cassandra Sandals Black", img:"https://cdn-images.farfetch-contents.com/22/82/99/21/22829921_53104837_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:172, name:"Saint Laurent 110mm Twist-detail Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/69/40/55/31694055_61217216_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:173, name:"Valentino Garavani VLTN Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/14/71/23/19/14712319_37541479_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:174, name:"Valentino Garavani Rockstud Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/12/52/25/24/12522524_52386099_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:175, name:"Valentino Garavani VLogo Signature Slide Sandals Black", img:"https://cdn-images.farfetch-contents.com/18/19/03/00/18190300_39003845_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:176, name:"Valentino Garavani Rockstud Thong Slides Black", img:"https://cdn-images.farfetch-contents.com/14/88/30/61/14883061_24187286_1000.jpg", cat:"luxury", catLabel:"럭셔리", source:"scraped" },
+  { id:177, name:"Maison Margiela Tabi Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/16/80/11/62/16801162_34375420_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:178, name:"Maison Margiela Tabi Toe Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/16/03/01/42/16030142_30720994_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:179, name:"Guidi Lace-up Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/22/92/41/54/22924154_53086737_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:180, name:"Guidi Leather Mules Black", img:"https://cdn-images.farfetch-contents.com/30/08/81/81/30088181_59485570_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:181, name:"Marsell Sottile Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/27/35/14/66/27351466_57346375_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:182, name:"Yohji Yamamoto Lace-up Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/23/44/93/86/23449386_53605383_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:183, name:"Yohji Yamamoto Open-toe Sandals Black", img:"https://cdn-images.farfetch-contents.com/35/47/22/45/35472245_67030181_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:184, name:"Yohji Yamamoto Knotted Leather Sandals Black", img:"https://cdn-images.farfetch-contents.com/31/42/52/01/31425201_61406584_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:185, name:"Yohji Yamamoto Platform Sandals Black", img:"https://cdn-images.farfetch-contents.com/33/78/79/05/33787905_64676016_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" },
+  { id:186, name:"Yohji Yamamoto 40mm Geta Sandals Black", img:"https://cdn-images.farfetch-contents.com/29/99/52/31/29995231_59140828_1000.jpg", cat:"highend", catLabel:"하이엔드", source:"scraped" }
 ];
 
-const STORAGE_KEY = 'coa-blackcombat-selections';
-const categories = [
+// ─────────────────────────────────────────────
+// 2. CoA 디자인 (101개, designs/ 폴더 로컬 파일)
+// ─────────────────────────────────────────────
+const coaDesigns = Array.from({length: 101}, function(_, i) {
+  var n = i + 1;
+  var pad = String(n).padStart(3, '0');
+  return {
+    id: 1000 + n,
+    name: 'CoA Concept #' + pad,
+    img: 'designs/design_' + pad + '.png',
+    cat: 'coa',
+    catLabel: 'CoA 디자인',
+    source: 'coa',
+    generated: false
+  };
+});
+
+// ─────────────────────────────────────────────
+// 3. 상태 관리
+// ─────────────────────────────────────────────
+const STORAGE_KEY = 'bc-selections-v2';
+
+var state = loadState();
+var activeSection = 'all'; // 'all' | 'scraped' | 'coa' | 'generated'
+var activeFilter = 'all';
+var generatedCount = 0;
+
+// 생성된 카드 저장소 (localStorage 복원 포함)
+var generatedDesigns = loadGeneratedDesigns();
+
+function loadState() {
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      // v1 호환: 구형 포맷(단순 객체)도 수용
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed) && !parsed.yes) {
+        return { yes: [], no: [], selections: parsed };
+      }
+      if (parsed && parsed.selections) return parsed;
+      return { yes: [], no: [], selections: parsed };
+    }
+  } catch(e) {}
+  return { yes: [], no: [], selections: {} };
+}
+
+function getSelections() {
+  return state.selections || state;
+}
+
+function saveState() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ yes: state.yes || [], no: state.no || [], selections: getSelections() }));
+  } catch(e) {}
+}
+
+function loadGeneratedDesigns() {
+  try {
+    var saved = localStorage.getItem(STORAGE_KEY + '-generated');
+    return saved ? JSON.parse(saved) : [];
+  } catch(e) { return []; }
+}
+
+function saveGeneratedDesigns() {
+  try {
+    localStorage.setItem(STORAGE_KEY + '-generated', JSON.stringify(generatedDesigns));
+  } catch(e) {}
+}
+
+// ─────────────────────────────────────────────
+// 4. allDesigns 머지
+// ─────────────────────────────────────────────
+function getAllDesigns() {
+  return generatedDesigns.concat(coaDesigns).concat(designs);
+}
+
+// ─────────────────────────────────────────────
+// 5. 필터링
+// ─────────────────────────────────────────────
+var categories = [
   { key:'all', label:'전체' },
   { key:'highend', label:'하이엔드' },
   { key:'street', label:'스트릿' },
@@ -528,96 +919,176 @@ const categories = [
   { key:'minimal', label:'미니멀' },
   { key:'classic', label:'클래식' },
   { key:'gothic', label:'고딕' },
-  { key:'aqua', label:'아쿠아' }
+  { key:'aqua', label:'아쿠아' },
+  { key:'coa', label:'CoA 디자인' }
 ];
 
-let state = loadState();
-let activeFilter = 'all';
-
-function loadState() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : {};
-  } catch(e) { return {}; }
-}
-
-function saveState() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
-
 function getFiltered() {
-  if (activeFilter === 'all') return designs;
-  return designs.filter(d => d.cat === activeFilter);
+  var designsToRender;
+  if (activeSection === 'yes') {
+    // 선택(O)한 것만 — 전체 풀에서 sel === 'yes'
+    var selYes = getSelections();
+    var allPool = generatedDesigns.concat(coaDesigns).concat(designs);
+    designsToRender = allPool.filter(function(d) { return selYes[d.id] === 'yes'; });
+  } else if (activeSection === 'generated') {
+    designsToRender = generatedDesigns;
+  } else if (activeSection === 'coa') {
+    designsToRender = coaDesigns; // generated 제외
+  } else if (activeSection === 'scraped') {
+    designsToRender = designs; // 186개
+  } else {
+    designsToRender = generatedDesigns.concat(coaDesigns).concat(designs); // 생성된 것 맨 앞
+  }
+  // 카테고리 필터
+  if (activeFilter === 'all') return designsToRender;
+  return designsToRender.filter(function(d) { return d.cat === activeFilter; });
+}
+
+// ─────────────────────────────────────────────
+// 6. 렌더링
+// ─────────────────────────────────────────────
+function renderSections() {
+  var bar = document.getElementById('sectionBar');
+  bar.innerHTML = '';
+  var scraped = designs.length;
+  var coa = coaDesigns.length;
+  var gen = generatedDesigns.length;
+  var selSec = getSelections();
+  var yesN = Object.values(selSec).filter(function(v) { return v === 'yes'; }).length;
+  var sections = [
+    { key:'all', label:'전체', count: scraped + coa + gen },
+    { key:'scraped', label:'스크래핑 ' + scraped, count: null },
+    { key:'coa', label:'CoA 디자인 ' + coa, count: null },
+    { key:'generated', label:'🎨 생성된 디자인', count: gen, neon: true },
+    { key:'yes', label:'⭐ 내가 선택 (O)', count: yesN, yes: true }
+  ];
+  sections.forEach(function(s) {
+    var btn = document.createElement('button');
+    btn.className = 'section-btn' + (activeSection === s.key ? ' active' : '');
+    if (s.neon && activeSection !== s.key) {
+      btn.style.borderColor = '#00ff9d';
+      btn.style.color = '#00ff9d';
+    }
+    if (s.yes && activeSection !== s.key) {
+      btn.style.borderColor = '#4CAF50';
+      btn.style.color = '#4CAF50';
+    }
+    if (s.yes && activeSection === s.key) {
+      btn.style.background = '#4CAF50';
+      btn.style.borderColor = '#4CAF50';
+      btn.style.color = '#fff';
+    }
+    var label = s.count !== null ? s.label + ' <span class="count">(' + s.count + ')</span>' : s.label;
+    btn.innerHTML = label;
+    btn.onclick = function() {
+      activeSection = s.key;
+      activeFilter = 'all';
+      renderSections();
+      renderFilters();
+      renderCards();
+    };
+    bar.appendChild(btn);
+  });
 }
 
 function renderFilters() {
-  const bar = document.getElementById('filterBar');
+  var bar = document.getElementById('filterBar');
   bar.innerHTML = '';
-  categories.forEach(c => {
-    const btn = document.createElement('button');
+  var sectionPool;
+  if (activeSection === 'generated') {
+    sectionPool = generatedDesigns;
+  } else if (activeSection === 'coa') {
+    sectionPool = coaDesigns;
+  } else if (activeSection === 'scraped') {
+    sectionPool = designs;
+  } else {
+    sectionPool = getAllDesigns();
+  }
+  categories.forEach(function(c) {
+    // CoA 카테고리는 CoA 섹션 또는 전체 섹션에서만 표시
+    if (c.key === 'coa' && activeSection === 'scraped') return;
+    // 스크래핑 카테고리는 스크래핑 섹션 또는 전체 섹션에서만 표시
+    var cnt = c.key === 'all' ? sectionPool.length : sectionPool.filter(function(d) { return d.cat === c.key; }).length;
+    if (cnt === 0 && c.key !== 'all') return;
+    var btn = document.createElement('button');
     btn.className = 'filter-btn' + (activeFilter === c.key ? ' active' : '');
-    const count = c.key === 'all' ? designs.length : designs.filter(d => d.cat === c.key).length;
-    btn.innerHTML = `${c.label} <span class="count">${count}</span>`;
-    btn.onclick = () => { activeFilter = c.key; renderFilters(); renderCards(); };
+    btn.innerHTML = c.label + ' <span class="count">' + cnt + '</span>';
+    btn.onclick = function() { activeFilter = c.key; renderFilters(); renderCards(); };
     bar.appendChild(btn);
   });
 }
 
 function renderCards() {
-  const grid = document.getElementById('grid');
+  var grid = document.getElementById('grid');
   grid.innerHTML = '';
-  const filtered = getFiltered();
-  filtered.forEach(d => {
-    const sel = state[d.id];
-    const card = document.createElement('div');
-    card.className = 'card' + (sel === 'yes' ? ' selected-yes' : sel === 'no' ? ' selected-no' : '');
+  var filtered = getFiltered();
+  var sel = getSelections();
+  filtered.forEach(function(d) {
+    var chosen = sel[d.id];
+    var card = document.createElement('div');
+    var extraClass = d.generated ? ' generated-card' : '';
+    card.className = 'card' + extraClass + (chosen === 'yes' ? ' selected-yes' : chosen === 'no' ? ' selected-no' : '');
 
-    const imgHtml = d.img
-      ? `<img class="card-img" src="${d.img}" alt="${d.name}" loading="lazy" onerror="this.outerHTML='<div class=\\'card-img-placeholder\\'>이미지 로드 실패</div>'">`
-      : `<div class="card-img-placeholder">이미지 없음</div>`;
+    var imgHtml = d.img
+      ? '<img class="card-img" src="' + d.img + '" alt="' + escHtml(d.name) + '" loading="lazy" data-fallback="1" data-lightbox-id="' + d.id + '" style="cursor:zoom-in">'
+      : '<div class="card-img-placeholder">이미지 없음</div>';
 
-    card.innerHTML = `
-      <div class="card-number">${d.id}</div>
-      ${imgHtml}
-      <div class="card-body">
-        <h3>${d.name} <span class="badge badge-${d.cat}">${d.catLabel}</span></h3>
-        <div class="btns">
-          <button class="btn-yes ${sel==='yes'?'active':''}" onclick="select(${d.id},'yes')">O</button>
-          <button class="btn-no ${sel==='no'?'active':''}" onclick="select(${d.id},'no')">X</button>
-        </div>
-      </div>
-    `;
+    var generatedBadge = d.generated
+      ? ' <span class="badge badge-generated">🎨 AI 생성</span>'
+      : '';
+    card.innerHTML =
+      '<div class="card-number">' + d.id + '</div>' +
+      imgHtml +
+      '<div class="card-body">' +
+        '<h3>' +
+          '<span class="h3-text">' + escHtml(d.name) + ' <span class="badge badge-' + d.cat + '">' + d.catLabel + '</span>' + generatedBadge + '</span>' +
+          '<button class="zoom-btn" data-zoom-id="' + d.id + '" title="확대">🔍</button>' +
+        '</h3>' +
+        '<div class="btns">' +
+          '<button class="btn-yes ' + (chosen === 'yes' ? 'active' : '') + '" onclick="select(' + d.id + ',\'yes\')">O</button>' +
+          '<button class="btn-no ' + (chosen === 'no' ? 'active' : '') + '" onclick="select(' + d.id + ',\'no\')">X</button>' +
+        '</div>' +
+      '</div>';
     grid.appendChild(card);
   });
   updateStats();
 }
 
+function escHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function select(id, choice) {
-  state[id] = state[id] === choice ? null : choice;
-  if (state[id] === null) delete state[id];
+  var sel = getSelections();
+  sel[id] = sel[id] === choice ? null : choice;
+  if (sel[id] === null) delete sel[id];
   saveState();
+  renderSections(); // O 카운트 실시간 반영
   renderCards();
 }
 
 function updateStats() {
-  const yes = Object.values(state).filter(v => v === 'yes').length;
-  const no = Object.values(state).filter(v => v === 'no').length;
-  document.getElementById('total').textContent = designs.length;
+  var sel = getSelections();
+  var all = getAllDesigns();
+  var yes = Object.values(sel).filter(function(v) { return v === 'yes'; }).length;
+  var no = Object.values(sel).filter(function(v) { return v === 'no'; }).length;
+  var total = all.length;
+  document.getElementById('total').textContent = total;
   document.getElementById('yesCount').textContent = yes;
   document.getElementById('noCount').textContent = no;
-  document.getElementById('pendingCount').textContent = designs.length - yes - no;
+  document.getElementById('pendingCount').textContent = total - yes - no;
+}
+
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
 
 function resetAll() {
   if (!confirm('모든 선택을 초기화할까요?')) return;
-  state = {};
+  state = { yes: [], no: [], selections: {} };
   saveState();
   renderCards();
   document.getElementById('resultArea').style.display = 'none';
@@ -625,34 +1096,36 @@ function resetAll() {
 }
 
 function showResult() {
-  const selected = designs.filter(d => state[d.id] === 'yes');
+  var sel = getSelections();
+  var all = getAllDesigns();
+  var selected = all.filter(function(d) { return sel[d.id] === 'yes'; });
   if (selected.length === 0) {
     alert('O로 선택된 디자인이 없습니다.');
     return;
   }
-  const resultArea = document.getElementById('resultArea');
-  const resultGrid = document.getElementById('resultGrid');
-  const copyText = document.getElementById('copyText');
+  var resultArea = document.getElementById('resultArea');
+  var resultGrid = document.getElementById('resultGrid');
+  var copyText = document.getElementById('copyText');
 
   resultGrid.innerHTML = '';
-  selected.forEach(d => {
-    const card = document.createElement('div');
+  selected.forEach(function(d) {
+    var card = document.createElement('div');
     card.className = 'result-card';
-    card.innerHTML = `<h4>#${d.id} ${d.name}</h4><p>${d.catLabel}</p>`;
+    card.innerHTML = '<h4>#' + d.id + ' ' + escHtml(d.name) + '</h4><p>' + d.catLabel + '</p>';
     resultGrid.appendChild(card);
   });
 
-  let text = `COA x BLACK COMBAT 콜라보 여름 슬리퍼\n`;
-  text += `제작 가능 디자인 셀렉션 (${selected.length}개)\n`;
-  text += `${'─'.repeat(40)}\n\n`;
-  selected.forEach((d, i) => {
-    text += `${i+1}. #${d.id} ${d.name} [${d.catLabel}]\n`;
-    if (d.img) text += `   이미지: ${d.img}\n`;
-    text += `\n`;
+  var text = 'COA x BLACK COMBAT 콜라보 여름 슬리퍼\n';
+  text += '제작 가능 디자인 셀렉션 (' + selected.length + '개)\n';
+  text += '─'.repeat(40) + '\n\n';
+  selected.forEach(function(d, i) {
+    text += (i+1) + '. #' + d.id + ' ' + d.name + ' [' + d.catLabel + ']\n';
+    if (d.img && !d.img.startsWith('data:')) text += '   이미지: ' + d.img + '\n';
+    text += '\n';
   });
-  text += `${'─'.repeat(40)}\n`;
-  text += `Core of Alchemy (COA) x Black Combat\n`;
-  text += `선택일: ${new Date().toLocaleDateString('ko-KR')}`;
+  text += '─'.repeat(40) + '\n';
+  text += 'Core of Alchemy (COA) x Black Combat\n';
+  text += '선택일: ' + new Date().toLocaleDateString('ko-KR');
 
   copyText.textContent = text;
   resultArea.style.display = 'block';
@@ -660,14 +1133,347 @@ function showResult() {
 }
 
 function copyToClipboard() {
-  const text = document.getElementById('copyText').textContent;
-  navigator.clipboard.writeText(text).then(() => {
+  var text = document.getElementById('copyText').textContent;
+  navigator.clipboard.writeText(text).then(function() {
     showToast('클립보드에 복사 완료');
   });
 }
 
+// ─────────────────────────────────────────────
+// 7. 드롭존 로직
+// ─────────────────────────────────────────────
+var refImages = []; // dataURL 배열
+
+var dropArea = document.getElementById('dropArea');
+var fileInput = document.getElementById('fileInput');
+var genBtn = document.getElementById('genBtn');
+var genStatus = document.getElementById('genStatus');
+
+dropArea.addEventListener('click', function(e) {
+  if (e.target.classList.contains('remove-btn')) return;
+  fileInput.click();
+});
+
+dropArea.addEventListener('dragover', function(e) {
+  e.preventDefault();
+  dropArea.classList.add('drag-over');
+});
+
+dropArea.addEventListener('dragleave', function() {
+  dropArea.classList.remove('drag-over');
+});
+
+dropArea.addEventListener('drop', function(e) {
+  e.preventDefault();
+  dropArea.classList.remove('drag-over');
+  handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', function() {
+  handleFiles(fileInput.files);
+  fileInput.value = '';
+});
+
+function handleFiles(fileList) {
+  var remaining = 4 - refImages.length;
+  if (remaining <= 0) { alert('최대 4장까지 업로드할 수 있습니다.'); return; }
+  var files = Array.from(fileList).slice(0, remaining);
+  files.forEach(function(file) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      refImages.push(e.target.result);
+      renderPreviews();
+      updateGenBtn();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderPreviews() {
+  var container = document.getElementById('dropPreviews');
+  container.innerHTML = '';
+  refImages.forEach(function(dataUrl, idx) {
+    var wrap = document.createElement('div');
+    wrap.className = 'drop-preview-item';
+    var img = document.createElement('img');
+    img.src = dataUrl;
+    var rmBtn = document.createElement('button');
+    rmBtn.className = 'remove-btn';
+    rmBtn.textContent = '×';
+    rmBtn.onclick = function(e) {
+      e.stopPropagation();
+      refImages.splice(idx, 1);
+      renderPreviews();
+      updateGenBtn();
+    };
+    wrap.appendChild(img);
+    wrap.appendChild(rmBtn);
+    container.appendChild(wrap);
+  });
+}
+
+function updateGenBtn() {
+  genBtn.disabled = refImages.length === 0;
+}
+
+// ─────────────────────────────────────────────
+// 8. 디자인 생성 버튼 동작 — 아웃솔 고정 + 로고 고정 + 드롭 수만큼 반복
+// ─────────────────────────────────────────────
+// TODO: Railway 배포 후 실제 URL 입력
+var apiBase = (window.location.hostname === 'localhost' || window.location.protocol === 'file:')
+  ? 'http://localhost:3001'
+  : 'https://YOUR_RAILWAY_BACKEND_URL'; // TODO: Railway 배포 후 실제 URL 입력
+
+// 풋베드(footbed, 발이 닿는 상단 안창) 이미지를 페이지 로드 시 미리 base64로 캐시
+// — 생성 때마다 자동 참조에 포함하여 "발 닿는 면"의 형태·라인을 고정
+var FOOTBED_DATA_URL = null;
+(async function preloadFootbed() {
+  try {
+    var r = await fetch('assets/footbed.png');
+    var blob = await r.blob();
+    var reader = new FileReader();
+    reader.onload = function() { FOOTBED_DATA_URL = reader.result; };
+    reader.readAsDataURL(blob);
+  } catch (e) {
+    // fallback: 로드 실패해도 생성은 진행 (프롬프트로만 보완)
+  }
+})();
+
+function buildGenerationPrompt(hint, refIndex, totalN) {
+  var hintBlock = hint ? [
+    'USER DESIGN DIRECTION (MUST be reflected prominently in the output — this is the single most important instruction, overriding any default styling assumptions):',
+    hint,
+    ''
+  ] : [];
+  return hintBlock.concat([
+    'Create a new photorealistic product concept photograph for the BLACK COMBAT x CoA slipper collaboration.',
+    '',
+    'Image 1: a design inspiration reference from the user.',
+    FOOTBED_DATA_URL ? 'Image 2: the EXACT FOOTBED (the top surface where the foot rests — NOT the outsole, NOT the tread) that must be used on every generated design. Study the outline, the ergonomic foot-shape contour, and the arch/toe/heel cups. Replicate this footbed shape and its black matte finish precisely on the top of the new slipper. Do NOT show Image 2 as a bottom tread — it is the INSOLE / footbed seen from above.' : '',
+    '',
+    'Composition — MUST MATCH this exact two-view layout (same as the BLACK COMBAT SLIPPER CONCEPT #001~#101 series):',
+    '- Pure white studio background, no floor line, no gradient',
+    '- SINGLE image divided into two stacked views of the SAME slipper',
+    '- TOP HALF: pure SIDE PROFILE view (camera perfectly level, lateral side of the shoe fully visible head-to-toe, straps and silhouette readable, entire slipper floating slightly above the horizontal mid-line)',
+    '- BOTTOM HALF: pure TOP-DOWN view (camera directly above looking straight down, the slipper seen from above showing the FOOTBED from Image 2 and the strap arrangement on top, full outline visible)',
+    '- Both views horizontally centered, aligned on the same vertical axis, equal size, subtle contact shadow beneath each',
+    '- Space between the two views so they do not overlap',
+    '',
+    'Branding — CRITICAL:',
+    '- Integrate the "BLACK COMBAT" brand logo naturally on the strap, tongue, or upper',
+    '- Render it as embossed, debossed, rubberized patch, or subtle tonal print',
+    '- Must look like official premium product branding, not a decal or sticker',
+    '- If you render it as text, use clean bold sans-serif, legible but discreet',
+    '',
+    'Style baseline (apply unless user direction above overrides):',
+    '- All-black color palette: matte black rubber, black webbing, black EVA foam, black leather, black mesh',
+    '- Modern tactical/combat/minimal aesthetic',
+    '- Photorealistic commercial product photography, sharp edge-to-edge focus',
+    '- Subtle contact shadow under the sole',
+    '',
+    hint ? 'Reminder: apply the USER DESIGN DIRECTION above (' + hint + ') as the primary stylistic driver.' : '',
+    '',
+    'Label overlay: at the top-left of the image, include a small clean sans-serif label "BLACK COMBAT SLIPPER CONCEPT" with a 3-digit concept number.',
+    '',
+    'Constraints: no humans, no extra slippers beyond the hero one, no watermarks other than the concept label and the BLACK COMBAT product branding, no background objects.',
+    'Iteration note: this is variant ' + refIndex + ' of ' + totalN + ' — make the silhouette distinctly different from typical slider sandals while keeping all rules above.',
+  ]).filter(Boolean).join('\n');
+}
+
+async function generateOne(refImage, idx, totalN, hint) {
+  var references = [];
+  if (OUTSOLE_DATA_URL) references.push(OUTSOLE_DATA_URL);
+
+  var resp = await fetch(apiBase + '/api/gemini?action=edit-image', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      image: refImage, // 드롭한 레퍼런스 중 하나가 primary
+      referenceImages: references, // 아웃솔 고정 참조
+      prompt: buildGenerationPrompt(hint, idx, totalN),
+      engine: 'gpt-image-2',
+      quality: 'low' // 빠른·저렴 생성 (장당 ~$0.01)
+    })
+  });
+  var data = await resp.json();
+  if (!resp.ok || !data.success) {
+    throw new Error(data.error || data.message || 'API 오류');
+  }
+  var resultImg = data.imageBase64 || data.imageUrl || (data.images && data.images[0]) || null;
+  if (!resultImg) throw new Error('이미지 데이터 없음');
+  return resultImg;
+}
+
+genBtn.addEventListener('click', async function() {
+  if (refImages.length === 0) return;
+  genBtn.disabled = true;
+  var hint = document.getElementById('genHint').value.trim();
+  var total = refImages.length;
+  var done = 0;
+  var errors = 0;
+
+  // 아웃솔 프리로드 대기 (최대 2초)
+  for (var w = 0; w < 20 && !OUTSOLE_DATA_URL; w++) {
+    await new Promise(function(r) { setTimeout(r, 100); });
+  }
+
+  genStatus.className = 'gen-status loading';
+  genStatus.textContent = '생성 중... (0/' + total + ' · 장당 1~3분)';
+
+  // 드롭한 각 레퍼런스로 1장씩 순차 생성
+  for (var i = 0; i < refImages.length; i++) {
+    try {
+      var img = await generateOne(refImages[i], i + 1, total, hint);
+      generatedCount++;
+      var newDesign = {
+        id: 1000 + 101 + generatedCount,
+        name: 'CoA Generated #' + generatedCount,
+        img: img,
+        cat: 'coa',
+        catLabel: 'CoA 디자인',
+        source: 'coa',
+        generated: true
+      };
+      generatedDesigns.unshift(newDesign);
+      saveGeneratedDesigns();
+      activeSection = 'generated';
+      activeFilter = 'all';
+      renderSections();
+      renderFilters();
+      renderCards();
+      done++;
+    } catch (err) {
+      errors++;
+    }
+    genStatus.textContent = '생성 중... (' + (done + errors) + '/' + total + ' · 성공 ' + done + ', 실패 ' + errors + ')';
+  }
+
+  genStatus.className = errors > 0 ? 'gen-status error' : 'gen-status success';
+  genStatus.textContent = '완료! 성공 ' + done + '장 / 실패 ' + errors + '장';
+  setTimeout(function() { genStatus.textContent = ''; }, 4000);
+  updateGenBtn();
+});
+
+// ─────────────────────────────────────────────
+// 9. 이미지 에러 위임 핸들러 (capture 필요, error는 bubble 안 함)
+// ─────────────────────────────────────────────
+document.getElementById('grid').addEventListener('error', function(e) {
+  var t = e.target;
+  if (t.tagName === 'IMG' && t.dataset.fallback === '1') {
+    var div = document.createElement('div');
+    div.className = 'card-img-placeholder';
+    div.textContent = '이미지 로드 실패';
+    t.replaceWith(div);
+  }
+}, true);
+
+// ─────────────────────────────────────────────
+// 10. 초기 렌더링
+// ─────────────────────────────────────────────
+// localStorage 복원된 generatedDesigns에서 카운터 맞추기
+generatedCount = generatedDesigns.filter(function(d) { return d.generated; }).length;
+
+renderSections();
 renderFilters();
 renderCards();
+
+// ─────────────────────────────────────────────
+// 11. 라이트박스 (이미지 확대 모달)
+// ─────────────────────────────────────────────
+(function initLightbox() {
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbMeta = document.getElementById('lbMeta');
+  var lbYes = document.getElementById('lbYes');
+  var lbNo = document.getElementById('lbNo');
+  var lbClose = document.getElementById('lbClose');
+  var lbPrev = document.getElementById('lbPrev');
+  var lbNext = document.getElementById('lbNext');
+  var currentId = null;
+
+  function findById(id) {
+    var all = generatedDesigns.concat(coaDesigns).concat(designs);
+    return all.find(function(d) { return d.id === id; });
+  }
+
+  function getVisibleList() {
+    return getFiltered(); // 현재 필터 기준 리스트 (좌우 내비 대상)
+  }
+
+  function openLb(id) {
+    var d = findById(id);
+    if (!d) return;
+    currentId = id;
+    lbImg.src = d.img || '';
+    lbImg.alt = d.name || '';
+    var sel = getSelections();
+    var chosen = sel[id];
+    lbMeta.innerHTML = '<span class="lb-num">#' + id + '</span>' +
+      '<strong>' + escHtml(d.name) + '</strong>' +
+      '<span class="badge badge-' + d.cat + '">' + d.catLabel + '</span>' +
+      (d.generated ? '<span class="badge badge-generated">🎨 AI</span>' : '');
+    lbYes.classList.toggle('active', chosen === 'yes');
+    lbNo.classList.toggle('active', chosen === 'no');
+    lb.classList.add('show');
+  }
+
+  function closeLb() { lb.classList.remove('show'); currentId = null; }
+
+  function nav(dir) {
+    var list = getVisibleList();
+    var idx = list.findIndex(function(d) { return d.id === currentId; });
+    if (idx < 0) return;
+    var next = (idx + dir + list.length) % list.length;
+    openLb(list[next].id);
+  }
+
+  // 카드 이미지 클릭 OR 돋보기 버튼 클릭 → 모달 (이벤트 위임)
+  document.getElementById('grid').addEventListener('click', function(e) {
+    var t = e.target;
+    // 돋보기 버튼 클릭
+    var zoomBtn = t.closest && t.closest('.zoom-btn');
+    if (zoomBtn && zoomBtn.dataset.zoomId) {
+      e.stopPropagation();
+      var zid = parseInt(zoomBtn.dataset.zoomId, 10);
+      if (!isNaN(zid)) openLb(zid);
+      return;
+    }
+    // 카드 이미지 탭
+    if (t.tagName === 'IMG' && t.dataset.lightboxId) {
+      var id = parseInt(t.dataset.lightboxId, 10);
+      if (!isNaN(id)) openLb(id);
+    }
+  });
+
+  lbClose.addEventListener('click', closeLb);
+  lb.addEventListener('click', function(e) { if (e.target === lb) closeLb(); }); // 배경 클릭
+  lbPrev.addEventListener('click', function() { nav(-1); });
+  lbNext.addEventListener('click', function() { nav(1); });
+
+  lbYes.addEventListener('click', function() {
+    if (currentId == null) return;
+    select(currentId, 'yes');
+    var sel = getSelections();
+    lbYes.classList.toggle('active', sel[currentId] === 'yes');
+    lbNo.classList.toggle('active', sel[currentId] === 'no');
+  });
+  lbNo.addEventListener('click', function() {
+    if (currentId == null) return;
+    select(currentId, 'no');
+    var sel = getSelections();
+    lbYes.classList.toggle('active', sel[currentId] === 'yes');
+    lbNo.classList.toggle('active', sel[currentId] === 'no');
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (!lb.classList.contains('show')) return;
+    if (e.key === 'Escape') closeLb();
+    else if (e.key === 'ArrowLeft') nav(-1);
+    else if (e.key === 'ArrowRight') nav(1);
+    else if (e.key === 'o' || e.key === 'O') lbYes.click();
+    else if (e.key === 'x' || e.key === 'X') lbNo.click();
+  });
+})();
 </script>
 </body>
 </html>

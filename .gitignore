@@ -1,0 +1,4 @@
+# 중간 산출물 (원본 다운로드 복사본, 로컬 테스트 결과)
+slipper-drafts/
+_test-results/
+*.tmp
